@@ -1899,7 +1899,7 @@ var tamingController=angular.module('tamingControllers', []).controller('tamingC
 				}
 				if ($scope.narcoticstiming.alarm==1 && $scope.narcoticstiming.buffertime/60<$scope.narcoticstiming.alarmthreshold) {
 					$scope.narcoticstiming.alarm=0;
-					var audio = new Audio('alarm.mp3');
+					var audio = new Audio('assets/audio/alarm.mp3');
 					audio.volume=0.3;
 					audio.play();
 				}
@@ -1934,7 +1934,7 @@ var tamingController=angular.module('tamingControllers', []).controller('tamingC
 				}*/
 				if ($scope.starvetiming.alarm==1 && $scope.starvetiming.starvetime/60<$scope.starvetiming.alarmthreshold) {
 					$scope.starvetiming.alarm=0;
-					var audio = new Audio('alarm.mp3');
+					var audio = new Audio('assets/audio/alarm.mp3');
 					audio.volume=0.3;
 					audio.play();
 				}
