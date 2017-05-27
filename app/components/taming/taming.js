@@ -1,7 +1,7 @@
 angular.module('TamingModule', []).controller('TamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
 
   var Version = "20170527";
-  var Default_Carnivore_Foods = ['Kibble-Generic', 'Raw Mutton', 'Cooked Lamb Chop', 'Prime Meat', 'Prime Fish', 'C/J Prime', 'Raw Meat', 'Raw Fish', 'Cooked Meat'];
+  var Default_Carnivore_Foods = ['Kibble-Generic', 'Raw Mutton', 'Cooked Lamb Chop', 'Raw Prime Meat', 'Prime Fish', 'C/J Prime', 'Raw Meat', 'Raw Fish', 'Cooked Meat'];
   var Taming_Multiplier_Modifier = 2.0;
 
 	$scope.foods = {
@@ -37,7 +37,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			food: 20,
 			affinity: 600
 		},
-		'Prime Meat': {
+		'Raw Prime Meat': {
 			food: 50,
 			affinity: 150
 		},
@@ -173,7 +173,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		'Kibble-Bronto',
 		'Kibble-Mosasaurus',
 		'Kibble-Diplodocus',
-		'Prime Meat',
+		'Raw Prime Meat',
 		'Prime Meat-Compy',
 		'Cooked Prime Meat',
 		'Prime Meat Jerky',
@@ -646,7 +646,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 22.5,
 			ineffectbyaff: 8.333333,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Prime Meat', 'C/J Prime'],
+			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -690,7 +690,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 45,
 			ineffectbyaff: 4.166666,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Prime Meat', 'C/J Prime'],
+			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -735,7 +735,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 125,
 			ineffectbyaff: 1.25,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Prime Meat', 'C/J Prime', 'Mejoberry', 'Other Berry', 'Kibble-Generic'],
+			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime', 'Mejoberry', 'Other Berry', 'Kibble-Generic'],
 			kibble: 'Carno',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -927,7 +927,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 45,
 			ineffectbyaff: 4.166667,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Prime Meat', 'C/J Prime'],
+			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -1051,7 +1051,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 600,
 			ineffectbyaff: 0.06,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Prime Meat', 'C/J Prime', 'Kibble-Mosasaurus'],
+			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime', 'Kibble-Mosasaurus'],
 			kibble: 'Quetzal',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1070,7 +1070,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 90,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Prime Meat', 'C/J Prime'],
+			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2.0,
 			nonviolentfoodaffinitymultiplier: 1.0
@@ -1525,9 +1525,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			"Creature": true,
 			"Food": true,
 			"Tame": true,
-			"Narcotics": false,
-			"Starve": false,
-			"Knockout": false
+			"Narcotics": true,
+			"Starve": true,
+			"Knockout": true
 		}
 	}
 

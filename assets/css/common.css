@@ -28,7 +28,7 @@ div.tableslide {
   /*background-color: rgba(40, 100, 100, 0.5);*/
   background: linear-gradient(rgba(40, 100, 100, 0.6), rgba(40, 100, 100, 0.3));
   border-radius: 10px;
-  margin: 5px 7px 15px 7px;
+  margin: 5px 0px 15px 0px;
   /*min-width: 400px;*/
   white-space: nowrap;
   padding: 3px 0px;
@@ -106,6 +106,12 @@ thead {
   padding-left:7px;
   padding-right:7px;
 }
+.content-box {
+  margin: 20px auto;
+  border-radius: 10px;
+  background: linear-gradient(rgba(40, 100, 100, 0.6), rgba(40, 100, 100, 0.3));
+  text-align: center;
+}
 .control-data {
   font-weight: normal;
   /*padding: 3px;*/
@@ -146,10 +152,8 @@ thead {
   margin-top: 7px;
 }
 .form-horizontal {
-  max-width:450px;
-  margin: 0 auto;
-  border-radius: 10px;
-  background: linear-gradient(rgba(40, 100, 100, 0.6), rgba(40, 100, 100, 0.3));
+  /*border-radius: 10px;
+  background: linear-gradient(rgba(40, 100, 100, 0.6), rgba(40, 100, 100, 0.3));*/
   text-align: center;
 }
 .form-horizontal .control-label {
@@ -230,10 +234,11 @@ thead {
   background-color: red;
 }
 .wrapperbox {
-  top:50px;
+  top:50;
   position:relative;
   min-height:100% - 50px;
   min-width:450px;
+  margin-bottom: 70px;
   justify-content: center;
   align-items:center;
   flex-wrap: wrap;

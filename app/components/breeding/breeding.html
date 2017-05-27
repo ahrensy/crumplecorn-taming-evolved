@@ -1,13 +1,16 @@
-<div class="container wrapperbox">
-  <div class="col-sm-1"></div>
+<div class="container content-box wrapperbox">
+  <div class="col-sm-12">
+    <h3>Crumplecorn: Breeding Evolved</h3>
+    <h4>an ark breeding calculator</h4>
+    <p class="subheading">V242.8<br>
+    Experimental - Use as guide only</p>
+  </div>
+</div>
 
-  <div class="col-sm-10">
+<div class="container content-box">
+  
+  <div class="col-sm-6">
     <form class="form-horizontal">
-      <h3>Crumplecorn: Breeding Evolved</h3>
-      <h4>an ark breeding calculator</h4>
-      <p class="subheading">V242.8<br>
-      Experimental - Use as guide only</p>
-
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Creature']}" ng-click="showhidetable('Creature')">Creature Details</div>
       <div class="tableslide" ng-show="tablevisibility['Creature']">
         <div class="form-group">
@@ -116,7 +119,11 @@
           <label class="col-sm-6 control-data">{{creature.timeuntildesiredbabybuffer | secondsToDateTime}}</label>
         </div>	
       </div>
-
+    </form>
+  </div>
+  
+  <div class="col-sm-6">
+    <form class="form-horizontal">
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Food']}" ng-click="showhidetable('Food')">Food Details</div>
       <div class="tableslide" ng-show="tablevisibility['Food']">	
         <div class="form-group">
@@ -206,18 +213,20 @@
           </div>
         </div>	
       </div>
-
-      <p class="footer">
-      <input id="helpcb" class="hidden" type="checkbox" ng-model="helphidden" ng-true-value="1" ng-false-value="0"><label for="helpcb">Show Help</label>
-      <input id="animationscb" class="hidden" type="checkbox" ng-model="displayconfig.showanimations" ng-true-value="0" ng-false-value="1" ng-change="showhideanimations()"><label for="animationscb">Disable Animations</label>
-      <input id="oldselectscb" class="hidden" type="checkbox" ng-model="displayconfig.showoldselects" ng-true-value="1" ng-false-value="0" ng-change="changedisplayconfig()"><label for="oldselectscb">Simple Selectors</label><br>
-      <a href="https://github.com/ahrensy/crumplecorn-taming-evolved">Feedback / Background / Changelog</a><br>
-      <!--a href="http://twitch.tv/crumplecorn">Stream</a> <a href="https://www.twitchalerts.com/donate/crumplecorn">Donate</a-->
-      </p>
-
     </form>
   </div>
-  <div class="col-sm-1"></div>
+</div>
+
+<div class="container">
+  <div class="col-sm-12">
+    <p class="footer">
+      <input id="extratamedetailscb" class="hidden" type="checkbox" ng-model="showextratamedetails" ng-change="showhideextratamedetails()" ng-true-value="1" ng-false-value="0"><label for="extratamedetailscb">Extra Tame Details</label>
+      <input id="animationscb" class="hidden" type="checkbox" ng-model="showanimations" ng-change="showhideanimations()" ng-true-value="0" ng-false-value="1"><label for="animationscb"> Disable Animations</label>
+      <input id="oldselectscb" class="hidden" type="checkbox" ng-model="showoldselects" ng-change="showhideoldselects()" ng-true-value="1" ng-false-value="0"><label for="oldselectscb">Simple Selectors</label><br>
+      <a href="https://github.com/ahrensy/crumplecorn-taming-evolved">Feedback / Background / Changelog</a><br>
+      <!--a href="http://twitch.tv/crumplecorn">Stream</a> <a href="https://www.twitchalerts.com/donate/crumplecorn">Donate</a-->
+    </p>
+  </div>
 </div>
 
 
