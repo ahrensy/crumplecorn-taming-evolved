@@ -2,6 +2,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
   var Version = "20170527";
   var Default_Carnivore_Foods = ['Kibble-Generic', 'Raw Mutton', 'Cooked Lamb Chop', 'Raw Prime Meat', 'Prime Fish', 'C/J Prime', 'Raw Meat', 'Raw Fish', 'Cooked Meat'];
+  var Herbivore_Foods_Default = ['Kibble-Generic', 'Mejoberry', 'Advanced Crop', 'Other Berry'];
+  var Herbivore_Foods_No_Kibble = Herbivore_Foods_Default.slice(1, 4);
   var Taming_Multiplier_Modifier = 2.0;
 
 	$scope.foods = {
@@ -97,7 +99,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			food: 20,
 			affinity: 20
 		},
-		'Crop': {
+		'Advanced Crop': {
 			food: 40,
 			affinity: 40
 		},
@@ -181,7 +183,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		'Raw Meat',
 		'Cooked Meat',
 		'Meat Jerky',
-		'Crop',
+		'Advanced Crop',
 		'Mejoberry',
 		'Other Berry',
 		'Spoiled Meat',
@@ -447,7 +449,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 0.2,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Dilo',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -538,7 +540,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 500,
 			ineffectbyaff: 0.06,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Bronto'],
+			foods: ['Kibble-Bronto'].concat(Herbivore_Foods_No_Kibble),
 			kibble: 'Turtle',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -559,7 +561,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 0.2,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Ptera',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -604,7 +606,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 100,
 			ineffectbyaff: 0.3,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Galli',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -712,7 +714,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 375.0,
 			ineffectbyaff: 0.08,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Diplodocus'],
+			foods: ['Kibble-Diplodocus'].concat(Herbivore_Foods_No_Kibble),
 			kibble: 'Lystrosaurus',
 			tamingmethods: ['Standard', 'Non-Violent'],
 			damagemultipliers: {
@@ -780,7 +782,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 22.5,
 			ineffectbyaff: 1.333333,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop'],
+			foods: Herbivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -801,7 +803,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 0.2,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Dilo',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -857,7 +859,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 95.0,
 			ineffectbyaff: 0.4,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Dimetro',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -961,7 +963,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 250,
 			ineffectbyaff: 0.12,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Raptor',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -994,7 +996,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60,
 			ineffectbyaff: 0.5,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Dimorph',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1107,7 +1109,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60.0,
 			ineffectbyaff: 0.5,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Dilo',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1129,7 +1131,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 325.0,
 			ineffectbyaff: 0.0923,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Pachy',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1150,7 +1152,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 75,
 			ineffectbyaff: 0.4,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop'],
+			foods: Herbivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -1194,7 +1196,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 0.2,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop'],
+			foods: Herbivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -1437,7 +1439,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 300,
 			ineffectbyaff: 0.1,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Sarco',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1482,7 +1484,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 0.2,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Generic'],
+			foods: Herbivore_Foods_Default,
 			kibble: 'Carno',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1503,7 +1505,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 125.0,
 			ineffectbyaff: 1.25,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Crop', 'Kibble-Bronto'],
+			foods: ['Kibble-Bronto'].concat(Herbivore_Foods_No_Kibble),
 			kibble: 'Terror Bird',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
