@@ -6,10 +6,6 @@ a:focus, a:hover {
     text-decoration: underline;
 }
 body {
-  /*font-family: 'Roboto', sans-serif;
-  font-family: 'Open Sans', sans-serif;
-  font-family: 'Arial', sans-serif;*/
-  /*font-size: 0.9em;*/
   color: white;
   /*text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.8), 1px -1px 0 rgba(0, 0, 0, 0.8), -1px 1px 0 rgba(0, 0, 0, 0.8), 1px 1px 0 rgba(0, 0, 0, 0.8);*/
   height: 100%;
@@ -43,9 +39,6 @@ h3 {
 input:checked + label {
   background-color: rgba(51, 153, 255, 0.7);
 }
-input {
-  /*width: 70px;*/
-}
 input, select {
   background-color: rgba(40, 150, 150, 0.3);
   border-width: 0px;
@@ -54,10 +47,6 @@ input, select {
   font-size: 10pt;
 }
 label.form-control {
-  /*background-color: rgba(40, 150, 150, 0.3);*/
-  /*padding: 2px;*/
-  /*margin-left: 5px;*/
-  /*font-size: 0.8em;*/
   text-align:center;
   margin:0px;
 }
@@ -109,7 +98,7 @@ thead {
   margin-left: 10px;
   margin-right: 10px;
 }
-.col-sm-3, .col-sm-4, .col-sm-5, .col-sm-7 {
+.col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7 {
   padding-left:7px;
   padding-right:7px;
 }
@@ -213,17 +202,7 @@ thead {
   background: linear-gradient(rgba(40, 100, 100, 0.6), rgba(40, 100, 100, 0.6));
 }
 .navbar {
-  /*display: table;*/
-  /*text-align: center;*/
-  /*border-width: 2px;
-  border-style: solid;*/
-  /*border-radius: 10px;*/
-  /*border-color:  rgba(50, 200, 200, 0.6);*/
-  /*background-color: rgba(40, 100, 100, 0.5);*/
   background: linear-gradient(rgba(40, 100, 100, 0.2), rgba(40, 100, 100, 1.0));
-  /*padding:10px;*/
-  /*margin-left: 10px;
-  margin-right: 10px;*/
 }
 .navbar-toggle {
   border-color: white;
@@ -244,13 +223,18 @@ thead {
 .timeralert {
   color: red;
 }
+.red {
+  color: red;
+}
+.redselect {
+  background-color: red;
+}
 .wrapperbox {
   top:50px;
   position:relative;
   min-height:100% - 50px;
   min-width:450px;
-  /*display:inline-flex;
   justify-content: center;
   align-items:center;
-  flex-wrap: wrap;*/
+  flex-wrap: wrap;
 }

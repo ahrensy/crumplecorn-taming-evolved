@@ -9,35 +9,35 @@
     <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Creature']}" ng-click="showhidetable('Creature')">Creature Details</div>
     <div class="tableslide" ng-show="tablevisibility['Creature']">
       <div class="form-group">
-          <label for="creatureName" class="col-sm-5 control-label">Creature:</label>
-          <div class="col-sm-7">
-            <select class="form-control" ng-show="showoldselects" ng-options="name as name for (name, details) in creatures" ng-model="creature.name" ng-change="selectdino()"></select>
-            <input class="form-control" ng-hide="showoldselects" class="autocomplete" autocomplete data-source="creatures" ng-change="searchdino()" data-default="creature.name" ng-model="creature.searchname">
-          </div>
+        <label for="creatureName" class="col-sm-5 control-label">Creature:</label>
+        <div class="col-sm-7">
+          <select class="form-control" ng-show="showoldselects" ng-options="name as name for (name, details) in creatures" ng-model="creature.name" ng-change="selectdino()"></select>
+          <input class="form-control" ng-hide="showoldselects" class="autocomplete" autocomplete data-source="creatures" ng-change="searchdino()" data-default="creature.name" ng-model="creature.searchname">
+        </div>
       </div>
       <div class="form-group">
-          <label class="col-sm-5 control-label">Level:</label>
-          <div class="col-sm-7">
-            <input class="form-control" ng-model="creature.level" ng-change="selectlevel()" type="number" min="1">
-          </div>
+        <label class="col-sm-5 control-label">Level:</label>
+        <div class="col-sm-7">
+          <input class="form-control" ng-model="creature.level" ng-change="selectlevel()" type="number" min="1">
+        </div>
       </div>
       <div class="form-group">
-          <label class="col-sm-5 control-label">Taming Method:</label>
-          <div class="col-sm-7">
-            <select class="form-control" ng-options="tamingmethod as tamingmethod for tamingmethod in creatures[creature.name].tamingmethods" ng-model="creature.tamingmethod" ng-change="settamingmethod()"></select>
-          </div>
+        <label class="col-sm-5 control-label">Taming Method:</label>
+        <div class="col-sm-7">
+          <select class="form-control" ng-options="tamingmethod as tamingmethod for tamingmethod in creatures[creature.name].tamingmethods" ng-model="creature.tamingmethod" ng-change="settamingmethod()"></select>
+        </div>
       </div>
       <div class="form-group">
-          <label class="col-sm-5 control-label">Taming Multiplier:</label>
-          <div class="col-sm-7">
-            <input class="form-control" ng-model="creature.tamingmultiplier" ng-change="settamingmethod()" type="number" step="any">
-          </div>
+        <label class="col-sm-5 control-label">Taming Multiplier:</label>
+        <div class="col-sm-7">
+          <input class="form-control" ng-model="creature.tamingmultiplier" ng-change="settamingmethod()" type="number" step="any">
+        </div>
       </div>
       <div class="form-group">
-          <label class="col-sm-5 control-label">Food Rate Multiplier:</label>
-          <div class="col-sm-7">
-            <input class="form-control" ng-model="creature.foodratemultiplier" ng-change="settamingmethod()" type="number" step="any">
-          </div>
+        <label class="col-sm-5 control-label">Food Rate Multiplier:</label>
+        <div class="col-sm-7">
+          <input class="form-control" ng-model="creature.foodratemultiplier" ng-change="settamingmethod()" type="number" step="any">
+        </div>
       </div>
       <div class="tablesummary slide" ng-hide="tablevisibility['Creature']">
         Level {{creature.level}} {{creature.name}}
@@ -252,7 +252,7 @@
         </div>
       </div>
       <div class="form-group" ng-repeat="(method, quantity) in ko.koquantities">
-        <label class="col-sm-5 control-label">{{method}}</label>
+        <label class="col-sm-5 control-label">{{method}}:</label>
         <label class="col-sm-7 control-data" >{{quantity}} ({{(ko.kotimes[method]>0)?(ko.kotimes[method]+" sec"):("Instant")}})</label>
       </div>
     </div>
