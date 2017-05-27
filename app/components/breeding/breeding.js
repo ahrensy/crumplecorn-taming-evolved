@@ -1,6 +1,9 @@
 angular.module('BreedingModule', []).controller('BreedingController', ['$scope', '$interval', '$cookies', '$animate', function($scope, $interval, $cookies, $animate) {
 
-	$scope.foods={
+  var Cookies_Prefix  =  "BreedingModule_";
+  var Version  =  "20170527";
+
+	$scope.foods = {
 
 		'Raw Meat': {
 			food: 50,
@@ -36,13 +39,13 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 
 	}
 
-	$scope.foodlists={
+	$scope.foodlists = {
 		Carnivore: ['Raw Meat', 'Cooked Meat'],
 		Herbivore: ['Mejoberry', 'Berry'],
 		Omnivore: ['Raw Meat', 'Cooked Meat', 'Mejoberry', 'Berry']
 	}
 
-	$scope.creatures={
+	$scope.creatures = {
 
 		Ankylosaurus: {
 			birthtype: "Incubation",
@@ -553,29 +556,29 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 
 	}
 
-	$scope.settings=$cookies.getObject('settings');
-	if ($scope.settings==undefined || $scope.settings.version!="160227") {
-		$scope.settings={
-			version: "160227",
+	$scope.settings = $cookies.getObject(Cookies_Prefix + 'settings');
+	if ($scope.settings == undefined || $scope.settings.version != Version) {
+		$scope.settings = {
+			version: Version,
 			consumptionspeed: 1,
 			maturationspeed: 1,
 			hatchspeed: 1
 		}
 	}
 
-	$scope.displayconfig=$cookies.getObject('displayconfig');
-	if ($scope.displayconfig==undefined || $scope.displayconfig.version!="160227") {
-		$scope.displayconfig={
-			version: "160227",
+	$scope.displayconfig = $cookies.getObject(Cookies_Prefix + 'displayconfig');
+	if ($scope.displayconfig == undefined || $scope.displayconfig.version != Version) {
+		$scope.displayconfig = {
+			version: Version,
 			showoldselects: 0,
 			showanimations: 1
 		}
 	}
 	$animate.enabled($scope.displayconfig.showanimations);
 
-	$scope.tablevisibility=$cookies.getObject('tablevisibility');
-	if ($scope.tablevisibility==undefined) {
-		$scope.tablevisibility={
+	$scope.tablevisibility = $cookies.getObject(Cookies_Prefix + 'tablevisibility');
+	if ($scope.tablevisibility == undefined) {
+		$scope.tablevisibility = {
 			"Creature": true,
 			"Maturation": true,
 			"Baby": true,
@@ -585,26 +588,26 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 		}
 	}
 
-	$scope.creature=$cookies.getObject('creature');
-	if ($scope.creature==undefined || !($scope.creature.name in $scope.creatures)) {
-		$scope.creature={
+	$scope.creature = $cookies.getObject(Cookies_Prefix + 'creature');
+	if ($scope.creature == undefined || !($scope.creature.name in $scope.creatures)) {
+		$scope.creature = {
 			name: "Rex"
 		};
 	}
 
-	$scope.troughcreatures=$cookies.getObject("troughcreatures");
-	if ($scope.troughcreatures==undefined) {
-		$scope.troughcreatures=[];
+	$scope.troughcreatures = $cookies.getObject(Cookies_Prefix + "troughcreatures");
+	if ($scope.troughcreatures == undefined) {
+		$scope.troughcreatures = [];
 	}
 
-	$scope.troughstacks=$cookies.getObject("troughstacks");
-	if ($scope.troughstacks==undefined) {
-		$scope.troughstacks=[];
+	$scope.troughstacks = $cookies.getObject(Cookies_Prefix + "troughstacks");
+	if ($scope.troughstacks == undefined) {
+		$scope.troughstacks = [];
 	}
 
-	$scope.troughdata=$cookies.getObject("troughdata");
-	if ($scope.troughdata==undefined) {
-		$scope.troughdata={
+	$scope.troughdata = $cookies.getObject(Cookies_Prefix + "troughdata");
+	if ($scope.troughdata == undefined) {
+		$scope.troughdata = {
 			type: undefined,
 			time: 0,
 			totalfood: 0,
@@ -621,140 +624,140 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 		}
 	}
 
-	$scope.showhidetable=function(table) {
-		$scope.tablevisibility[table]=!$scope.tablevisibility[table];
-		var now=new Date();
-		$cookies.putObject('tablevisibility', $scope.tablevisibility, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
+	$scope.showhidetable = function(table) {
+		$scope.tablevisibility[table] = !$scope.tablevisibility[table];
+		var now = new Date();
+		$cookies.putObject(Cookies_Prefix + 'tablevisibility', $scope.tablevisibility, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
-	$scope.showhideanimations=function() {
+	$scope.showhideanimations = function() {
 		$animate.enabled($scope.displayconfig.showanimations);
-		if ($scope.displayconfig.showanimations==0) {
+		if ($scope.displayconfig.showanimations == 0) {
 			alert("Refresh the page");
 		}
 		$scope.changedisplayconfig();
 	}
 
-	$scope.changedisplayconfig=function() {
-		var now=new Date();
-		$cookies.putObject('displayconfig', $scope.displayconfig, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
+	$scope.changedisplayconfig = function() {
+		var now = new Date();
+		$cookies.putObject(Cookies_Prefix + 'displayconfig', $scope.displayconfig, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
-	$scope.searchcreature=function() {
+	$scope.searchcreature = function() {
 		//alert("searchdino");
-		var creature=$scope.creature;
-		var creatures=$scope.creatures;
+		var creature = $scope.creature;
+		var creatures = $scope.creatures;
 
 		if (creature.searchname in creatures) {
-			creature.name=creature.searchname;
+			creature.name = creature.searchname;
 			$scope.selectcreature();
 		}
 	}
 
-	$scope.selectsettings=function() {
-		settings=$scope.settings;
-		if (isNaN(settings.consumptionspeed) || settings.consumptionspeed<=0) {
+	$scope.selectsettings = function() {
+		settings = $scope.settings;
+		if (isNaN(settings.consumptionspeed) || settings.consumptionspeed <= 0) {
 			return;
 		}
-		if (isNaN(settings.maturationspeed) || settings.maturationspeed<=0) {
+		if (isNaN(settings.maturationspeed) || settings.maturationspeed <= 0) {
 			return;
 		}
-		if (isNaN(settings.hatchspeed) || settings.hatchspeed<=0) {
+		if (isNaN(settings.hatchspeed) || settings.hatchspeed <= 0) {
 			return;
 		}
-		var now=new Date();
-		$cookies.putObject('settings', settings, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
+		var now = new Date();
+		$cookies.putObject(Cookies_Prefix + 'settings', settings, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 		$scope.selectcreature();
 		$scope.troughcalc();
 	}
 
-	$scope.selectcreature=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
+	$scope.selectcreature = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
 
-		creature.searchname=creature.name; //Ensure the searchname is kept up to date
+		creature.searchname = creature.name; //Ensure the searchname is kept up to date
 
-		creature.maturationtime=1/creaturedata.agespeed/creaturedata.agespeedmult/$scope.settings.maturationspeed;
-		creature.babytime=creature.maturationtime/10;
+		creature.maturationtime = 1/creaturedata.agespeed/creaturedata.agespeedmult/$scope.settings.maturationspeed;
+		creature.babytime = creature.maturationtime/10;
 
-		if (creaturedata.birthtype=="Incubation") {
-			creature.birthtime=100/creaturedata.eggspeed/creaturedata.eggspeedmult/$scope.settings.hatchspeed;
-			creature.birthlabel="Incubation";
+		if (creaturedata.birthtype == "Incubation") {
+			creature.birthtime = 100/creaturedata.eggspeed/creaturedata.eggspeedmult/$scope.settings.hatchspeed;
+			creature.birthlabel = "Incubation";
 		}
 
-		if (creaturedata.birthtype=="Gestation") {
-			creature.birthtime=1/creaturedata.gestationspeed/creaturedata.gestationspeedmult/$scope.settings.hatchspeed;
-			creature.birthlabel="Gestation";		
+		if (creaturedata.birthtype == "Gestation") {
+			creature.birthtime = 1/creaturedata.gestationspeed/creaturedata.gestationspeedmult/$scope.settings.hatchspeed;
+			creature.birthlabel = "Gestation";
 		}
 
-		creature.finalweight=creaturedata.weight;
-		creature.currentweight=0;
-		creature.maxfoodrate=creaturedata.maxfoodrate*$scope.settings.consumptionspeed;
-		creature.minfoodrate=creaturedata.minfoodrate*$scope.settings.consumptionspeed;
-		creature.foodratedecay=(creature.maxfoodrate-creature.minfoodrate)/creature.maturationtime;
-		creature.desiredbabybuffer=1;
+		creature.finalweight = creaturedata.weight;
+		creature.currentweight = 0;
+		creature.maxfoodrate = creaturedata.maxfoodrate*$scope.settings.consumptionspeed;
+		creature.minfoodrate = creaturedata.minfoodrate*$scope.settings.consumptionspeed;
+		creature.foodratedecay = (creature.maxfoodrate-creature.minfoodrate)/creature.maturationtime;
+		creature.desiredbabybuffer = 1;
 
-		$scope.foodunit=creaturedata.foods[0];
+		$scope.foodunit = creaturedata.foods[0];
 
 		$scope.selectweight();
 		$scope.totalfoodcalc();
 		$scope.babybuffercalc();
 	}
 
-	$scope.selectweight=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
-		creature.maturationprogress=creature.currentweight/creature.finalweight;
-		creature.maturationtimecomplete=creature.maturationtime*creature.maturationprogress;
-		creature.maturationtimeremaining=creature.maturationtime-creature.maturationtimecomplete;
-		creature.babytimeremaining=Math.max(0, creature.babytime-(creature.maturationtime*creature.maturationprogress));
+	$scope.selectweight = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
+		creature.maturationprogress = creature.currentweight/creature.finalweight;
+		creature.maturationtimecomplete = creature.maturationtime*creature.maturationprogress;
+		creature.maturationtimeremaining = creature.maturationtime-creature.maturationtimecomplete;
+		creature.babytimeremaining = Math.max(0, creature.babytime-(creature.maturationtime*creature.maturationprogress));
 
 		$scope.babybuffercalc();
 	}
 
-	$scope.totalfoodcalc=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
-		creature.totalfood=$scope.getfoodforperiod(0, creature.maturationtime, $scope.creature);
-		creature.babyfood=$scope.getfoodforperiod(0, creature.babytime, $scope.creature);
+	$scope.totalfoodcalc = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
+		creature.totalfood = $scope.getfoodforperiod(0, creature.maturationtime, $scope.creature);
+		creature.babyfood = $scope.getfoodforperiod(0, creature.babytime, $scope.creature);
 		if (!$scope.troughdata.linkfoodtabletotrough) {
-			creature.foodforday={};
-			day=1;
-			food=$scope.getfoodforperiod((day-1)*24*60*60, day*24*60*60, $scope.creature);
+			creature.foodforday = {};
+			day = 1;
+			food = $scope.getfoodforperiod((day-1)*24*60*60, day*24*60*60, $scope.creature);
 			while (food>0 && day<20) {
-				creature.foodforday[day]=food+food*$scope.troughdata.lossfactor/100;
+				creature.foodforday[day] = food+food*$scope.troughdata.lossfactor/100;
 				day++;
-				food=$scope.getfoodforperiod((day-1)*24*60*60, day*24*60*60, $scope.creature);
+				food = $scope.getfoodforperiod((day-1)*24*60*60, day*24*60*60, $scope.creature);
 			}
 		}
 	}
 
-	$scope.babybuffercalc=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
-		food=$scope.foods[$scope.foodunit];
-		creature.currentbabybuffer=creature.currentweight/$scope.foods[$scope.foodunit].weight*$scope.foods[$scope.foodunit].food/(creature.maxfoodrate-creature.foodratedecay*creature.maturationtimecomplete);
-		creature.maxbabybuffer=creature.finalweight/10/$scope.foods[$scope.foodunit].weight*$scope.foods[$scope.foodunit].food/(creature.maxfoodrate-creature.foodratedecay*creature.babytime);
-		creature.timeuntildesiredbabybuffer=Math.max(0,(creature.desiredbabybuffer*60*creature.babytime*food.weight*creature.maxfoodrate)/(creature.desiredbabybuffer*60*creature.babytime*food.weight*creature.foodratedecay+creature.finalweight/10*food.food)-creature.maturationtimecomplete);
+	$scope.babybuffercalc = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
+		food = $scope.foods[$scope.foodunit];
+		creature.currentbabybuffer = creature.currentweight/$scope.foods[$scope.foodunit].weight*$scope.foods[$scope.foodunit].food/(creature.maxfoodrate-creature.foodratedecay*creature.maturationtimecomplete);
+		creature.maxbabybuffer = creature.finalweight/10/$scope.foods[$scope.foodunit].weight*$scope.foods[$scope.foodunit].food/(creature.maxfoodrate-creature.foodratedecay*creature.babytime);
+		creature.timeuntildesiredbabybuffer = Math.max(0,(creature.desiredbabybuffer*60*creature.babytime*food.weight*creature.maxfoodrate)/(creature.desiredbabybuffer*60*creature.babytime*food.weight*creature.foodratedecay+creature.finalweight/10*food.food)-creature.maturationtimecomplete);
 
-		var now=new Date();
-		$cookies.putObject('creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
+		var now = new Date();
+		$cookies.putObject(Cookies_Prefix + 'creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
-	$scope.getfoodforperiod=function(start, end, creature) {
-		creaturedata=$scope.creatures[creature.name];
-		end=Math.min(creature.maturationtime, end);
-		end=Math.max(start, end);
-		startfoodrate=creature.maxfoodrate-creature.foodratedecay*start;
-		endfoodrate=creature.maxfoodrate-creature.foodratedecay*end;
-		totaltime=end-start;
+	$scope.getfoodforperiod = function(start, end, creature) {
+		creaturedata = $scope.creatures[creature.name];
+		end = Math.min(creature.maturationtime, end);
+		end = Math.max(start, end);
+		startfoodrate = creature.maxfoodrate-creature.foodratedecay*start;
+		endfoodrate = creature.maxfoodrate-creature.foodratedecay*end;
+		totaltime = end-start;
 		return 0.5*totaltime*(startfoodrate-endfoodrate)+endfoodrate*totaltime;
 	}
 
-	$scope.troughsetstacktype=function() {
-		foodlist=$scope.foodlists[$scope.troughdata.type];
-		$scope.troughstacks=[];
-		for (i=0;i<foodlist.length;i++) {
+	$scope.troughsetstacktype = function() {
+		foodlist = $scope.foodlists[$scope.troughdata.type];
+		$scope.troughstacks = [];
+		for (i = 0;i<foodlist.length;i++) {
 			$scope.troughstacks.push({
 				food: foodlist[i],
 				stacks: 0
@@ -762,7 +765,7 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 		}
 	}
 
-	$scope.troughaddcreature=function() {
+	$scope.troughaddcreature = function() {
 		$scope.troughcreatures.push({
 			name: $scope.creature.name,
 			currentweight: $scope.creature.currentweight,
@@ -771,84 +774,84 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 		$scope.troughcalc();
 	}
 
-	$scope.troughremovecreature=function(index) {
+	$scope.troughremovecreature = function(index) {
 		$scope.troughcreatures.splice(index, 1);
 		$scope.troughcalc();
 	}
 
-	$scope.troughcalc=function() {
-		troughcreatures=$scope.troughcreatures;
-		troughstacks=$scope.troughstacks;
+	$scope.troughcalc = function() {
+		troughcreatures = $scope.troughcreatures;
+		troughstacks = $scope.troughstacks;
 
-		if (troughcreatures.length==0) {
+		if (troughcreatures.length == 0) {
 			return;
 		}
 
-		stacks=[];
-		for (i=0; i<troughstacks.length; i++) {
-			foodname=troughstacks[i].food;
-			for (j=0; j<troughstacks[i].stacks; j++) {
+		stacks = [];
+		for (i = 0; i<troughstacks.length; i++) {
+			foodname = troughstacks[i].food;
+			for (j = 0; j<troughstacks[i].stacks; j++) {
 				stacks.push([$scope.foods[foodname].stack, $scope.foods[foodname].spoil*4, $scope.foods[foodname].spoil*4, $scope.foods[foodname].food, $scope.foods[foodname].waste]);
 			}
 		};
 
-		for (i=0;i<troughcreatures.length;i++) {
-			name=troughcreatures[i].name;
-			troughcreatures[i].maturationtime=1/$scope.creatures[name].agespeed/$scope.creatures[name].agespeedmult/$scope.settings.maturationspeed;
-			troughcreatures[i].maturationtimecomplete=troughcreatures[i].maturationtime*troughcreatures[i].currentweight/troughcreatures[i].finalweight;
-			troughcreatures[i].maxfoodrate=$scope.creatures[name].maxfoodrate*$scope.settings.consumptionspeed;
-			troughcreatures[i].minfoodrate=$scope.creatures[name].minfoodrate*$scope.settings.consumptionspeed;
-			troughcreatures[i].foodratedecay=(troughcreatures[i].maxfoodrate-troughcreatures[i].minfoodrate)/troughcreatures[i].maturationtime;
-			troughcreatures[i].foodrate=troughcreatures[i].maxfoodrate-troughcreatures[i].foodratedecay/troughcreatures[i].finalweight*troughcreatures[i].currentweight*troughcreatures[i].maturationtime;
+		for (i = 0;i<troughcreatures.length;i++) {
+			name = troughcreatures[i].name;
+			troughcreatures[i].maturationtime = 1/$scope.creatures[name].agespeed/$scope.creatures[name].agespeedmult/$scope.settings.maturationspeed;
+			troughcreatures[i].maturationtimecomplete = troughcreatures[i].maturationtime*troughcreatures[i].currentweight/troughcreatures[i].finalweight;
+			troughcreatures[i].maxfoodrate = $scope.creatures[name].maxfoodrate*$scope.settings.consumptionspeed;
+			troughcreatures[i].minfoodrate = $scope.creatures[name].minfoodrate*$scope.settings.consumptionspeed;
+			troughcreatures[i].foodratedecay = (troughcreatures[i].maxfoodrate-troughcreatures[i].minfoodrate)/troughcreatures[i].maturationtime;
+			troughcreatures[i].foodrate = troughcreatures[i].maxfoodrate-troughcreatures[i].foodratedecay/troughcreatures[i].finalweight*troughcreatures[i].currentweight*troughcreatures[i].maturationtime;
 		}
 
-		currentstack=0;
-		spoiledpoints=0;
-		spoiledfood=0;
-		eatenpoints=0;
-		eatenfood=0;
-		wastedpoints=0;
-		hunger=0;
+		currentstack = 0;
+		spoiledpoints = 0;
+		spoiledfood = 0;
+		eatenpoints = 0;
+		eatenfood = 0;
+		wastedpoints = 0;
+		hunger = 0;
 
-		time=0;
-		while (currentstack<stacks.length && ($scope.troughdata.cutoff==0 || time<$scope.troughdata.cutoff)) {
+		time = 0;
+		while (currentstack<stacks.length && ($scope.troughdata.cutoff == 0 || time<$scope.troughdata.cutoff)) {
 			time++;
 
-			for (i=0;i<troughcreatures.length;i++) { //Drop hunger rate over time and increment current hunger
-				troughcreatures[i].foodrate-=troughcreatures[i].foodratedecay;
-				hunger+=troughcreatures[i].foodrate*$scope.troughdata.stasisfactor;
+			for (i = 0;i<troughcreatures.length;i++) { //Drop hunger rate over time and increment current hunger
+				troughcreatures[i].foodrate -= troughcreatures[i].foodratedecay;
+				hunger += troughcreatures[i].foodrate*$scope.troughdata.stasisfactor;
 			}
 
-			while (currentstack<stacks.length && hunger>=stacks[currentstack][3]) {
+			while (currentstack<stacks.length && hunger >= stacks[currentstack][3]) {
 				stacks[currentstack][0]--;
 				eatenfood++;
-				eatenpoints+=stacks[currentstack][3];
-				wastedpoints+=stacks[currentstack][4];
-				hunger-=stacks[currentstack][3];
-				while(currentstack<stacks.length && stacks[currentstack][0]<=0) { //Move on to next stack if current is empty
+				eatenpoints += stacks[currentstack][3];
+				wastedpoints += stacks[currentstack][4];
+				hunger -= stacks[currentstack][3];
+				while(currentstack<stacks.length && stacks[currentstack][0] <= 0) { //Move on to next stack if current is empty
 					currentstack++;
 				}
 			}
 
 			//Spoil timers / spoiling
-			for (i=currentstack;i<stacks.length;i++) {
+			for (i = currentstack;i<stacks.length;i++) {
 				stacks[i][1]--; //Reduce spoil timer by one
-				if (stacks[i][1]<=0 && stacks[i][0]>0) { //Spoil timer passed, spoil a food
+				if (stacks[i][1] <= 0 && stacks[i][0]>0) { //Spoil timer passed, spoil a food
 					stacks[i][0]--;
-					stacks[i][1]=stacks[i][2];
+					stacks[i][1] = stacks[i][2];
 					spoiledfood++;
-					spoiledpoints+=stacks[i][3];
-					wastedpoints+=stacks[i][4];
+					spoiledpoints += stacks[i][3];
+					wastedpoints += stacks[i][4];
 				}
 			}
 
-			while(currentstack<stacks.length && stacks[currentstack][0]<=0) { //Move on to next stack if current is empty
+			while(currentstack<stacks.length && stacks[currentstack][0] <= 0) { //Move on to next stack if current is empty
 				currentstack++;
 			}
 
 		}
 
-		$scope.troughdata={
+		$scope.troughdata = {
 			type: $scope.troughdata.type,
 			time: time,
 			totalfood: eatenfood+spoiledfood,
@@ -866,31 +869,31 @@ angular.module('BreedingModule', []).controller('BreedingController', ['$scope',
 
 		if ($scope.troughdata.linkfoodtabletotrough) {
 
-			foodforday={};
-			day=1;
-			food=0;
-			for (i=0;i<troughcreatures.length;i++) {
-				food+=$scope.getfoodforperiod(troughcreatures[i].maturationtimecomplete+(day-1)*24*60*60, troughcreatures[i].maturationtimecomplete+day*24*60*60, troughcreatures[i]);
+			foodforday = {};
+			day = 1;
+			food = 0;
+			for (i = 0;i<troughcreatures.length;i++) {
+				food += $scope.getfoodforperiod(troughcreatures[i].maturationtimecomplete+(day-1)*24*60*60, troughcreatures[i].maturationtimecomplete+day*24*60*60, troughcreatures[i]);
 			}
 			while (food>0 && day<20) {
-				foodforday[day]=food+food*$scope.troughdata.lossfactor/100;
-				food=0;
+				foodforday[day] = food+food*$scope.troughdata.lossfactor/100;
+				food = 0;
 				day++;
-				for (i=0;i<troughcreatures.length;i++) {
-					food+=$scope.getfoodforperiod(troughcreatures[i].maturationtimecomplete+(day-1)*24*60*60, troughcreatures[i].maturationtimecomplete+day*24*60*60, troughcreatures[i]);
+				for (i = 0;i<troughcreatures.length;i++) {
+					food += $scope.getfoodforperiod(troughcreatures[i].maturationtimecomplete+(day-1)*24*60*60, troughcreatures[i].maturationtimecomplete+day*24*60*60, troughcreatures[i]);
 				}
 			}
-			$scope.creature.foodforday=foodforday;
+			$scope.creature.foodforday = foodforday;
 
-			var now=new Date();
-			$cookies.putObject('creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
+			var now = new Date();
+			$cookies.putObject(Cookies_Prefix + 'creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 
 		}
 
-		var now=new Date();
-		$cookies.putObject('troughcreatures', $scope.troughcreatures, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
-		$cookies.putObject('troughdata', $scope.troughdata, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
-		$cookies.putObject('troughstacks', $scope.troughstacks, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/breeding'});
+		var now = new Date();
+		$cookies.putObject(Cookies_Prefix + 'troughcreatures', $scope.troughcreatures, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
+		$cookies.putObject(Cookies_Prefix + 'troughdata', $scope.troughdata, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
+		$cookies.putObject(Cookies_Prefix + 'troughstacks', $scope.troughstacks, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
 	$scope.selectcreature();

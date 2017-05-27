@@ -57,7 +57,7 @@
           <label class="col-xs-3 control-label align-right">Time</label>
         </div>
         <div class="form-group" ng-repeat="food in creatures[creature.name].foods" class="repeatslide">
-          <label class="col-xs-5 control-label" ng-class="{'fillfood': creature.fillfood==food}" ng-click="setFillFood(food)">{{food.split("-")[0]}}{{food.split("-")[0]=="Kibble" ? ' ('+creatures[creature.name].kibble+')' : ''}}:</label>
+          <label class="col-xs-5 control-data" ng-class="{'fillfood': creature.fillfood==food}" ng-click="setFillFood(food)">{{food.split("-")[0]}}{{food.split("-")[0]=="Kibble" ? ' ('+creatures[creature.name].kibble+')' : ''}}:</label>
           <div class="col-xs-3">
             <input class="form-control" ng-model="foodamounts[food]" ng-change="foodcalc()" type="number">
           </div>

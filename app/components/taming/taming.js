@@ -1,10 +1,23 @@
 angular.module('TamingModule', []).controller('TamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
 
+  var Cookies_Prefix = "TamingModule_";
   var Version = "20170527";
-  var Default_Carnivore_Foods = ['Kibble-Generic', 'Raw Mutton', 'Cooked Lamb Chop', 'Raw Prime Meat', 'Prime Fish', 'C/J Prime', 'Raw Meat', 'Raw Fish', 'Cooked Meat'];
+  
+  var Audio_Volume = 0.3;
+  var Audio_Alarm = new Audio('assets/audio/alarm.mp3');
+  Audio_Alarm.volume = 0.0;
+  Audio_Alarm.play();
+
+  var Carnivore_Foods_Default = ['Kibble-Generic', 'Raw Mutton', 'Cooked Lamb Chop', 'Raw Prime Meat', 'Raw Prime Fish', 'C/J Prime', 'Raw Meat', 'Raw Fish', 'Cooked Meat'];
   var Herbivore_Foods_Default = ['Kibble-Generic', 'Mejoberry', 'Advanced Crop', 'Other Berry'];
-  var Herbivore_Foods_No_Kibble = Herbivore_Foods_Default.slice(1, 4);
+  var Carnivore_Foods_No_Kibble = Carnivore_Foods_Default.slice(1, Carnivore_Foods_Default.length + 1);
+  var Herbivore_Foods_No_Kibble = Herbivore_Foods_Default.slice(1, Herbivore_Foods_Default.length + 1);
   var Taming_Multiplier_Modifier = 2.0;
+
+  /* Check:
+    Arthropluera
+
+  */
 
 	$scope.foods = {
 		'Kibble-Mosasaurus': {
@@ -27,6 +40,18 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			food: 79.98,
 			affinity: 300
 		},
+    'Raw Mutton-Compy': {
+      food: 20,
+      affinity: 1300
+    },
+		'Prime Meat-Compy': {
+			food: 20,
+			affinity: 600
+		},
+		'Raw Prime Fish-Compy': {
+			food: 10,
+			affinity: 240
+		},
     'Raw Mutton': {
       food: 50,
       affinity: 375
@@ -35,10 +60,6 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
       food: 50,
       affinity: 200
     },
-		'Prime Meat-Compy': {
-			food: 20,
-			affinity: 600
-		},
 		'Raw Prime Meat': {
 			food: 50,
 			affinity: 150
@@ -47,7 +68,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			food: 50,
 			affinity: 100
 		},
-		'Prime Fish': {
+		'Raw Prime Fish': {
 			food: 25,
 			affinity: 60
 		},
@@ -189,7 +210,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		'Spoiled Meat',
 		'Raw Fish',
 		'Cooked Fish',
-		'Prime Fish',
+		'Raw Prime Fish',
 		'Cooked Prime Fish',
 		'Rare Mushroom',
 		'Plant Species X Seed',
@@ -405,7 +426,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 100,
 			ineffectbyaff: 1.875,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Diplo',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -427,7 +448,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 90,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Kairuku',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -482,7 +503,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 100,
 			ineffectbyaff: 1.875,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Stego',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -503,7 +524,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 75.0,
 			ineffectbyaff: 2.5,
 			basefood: 'Spoiled Meat',
-			foods: ['Raw Meat', 'Spoiled Meat', 'Broth of Enlightenment'],
+			foods: ['Broth of Enlightenment', 'Spoiled Meat', 'Raw Meat'],
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2.0,
 			nonviolentfoodaffinitymultiplier: 1.6
@@ -518,7 +539,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 75,
 			ineffectbyaff: 0.4,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Scorp',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -584,7 +605,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 100,
 			ineffectbyaff: 1.875,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Ankylo',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -627,7 +648,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 65.0,
 			ineffectbyaff: 8.333333,
 			basefood: 'Prime Meat-Compy',
-			foods: ['Prime Meat-Compy'],
+			foods: ['Raw Mutton-Compy', 'Prime Meat-Compy', 'Raw Prime Fish-Compy'],
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -648,7 +669,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 22.5,
 			ineffectbyaff: 8.333333,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
+			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -670,7 +691,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 90.0,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Quetzal',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -692,7 +713,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 45,
 			ineffectbyaff: 4.166666,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
+			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -737,7 +758,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 125,
 			ineffectbyaff: 1.25,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime', 'Mejoberry', 'Other Berry', 'Kibble-Generic'],
+			foods: Carnivore_Foods_Default.concat(['Mejoberry', 'Other Berry']),
 			kibble: 'Carno',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -759,7 +780,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60,
 			ineffectbyaff: 3.125,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Carno',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -821,7 +842,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 50.0,
 			ineffectbyaff: 4.166667,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Spoiled Meat', 'Human Feces', 'Small Feces', 'Medium Feces', 'Large Feces'],
+			foods: ['Large Feces', 'Medium Feces', 'Small Feces', 'Human Feces', 'Spoiled Meat', 'Raw Meat'],
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2,
 			nonviolentfoodaffinitymultiplier: 1.0
@@ -836,7 +857,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60.0,
 			ineffectbyaff: 3.275,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Titanoboa',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -881,7 +902,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 160,
 			ineffectbyaff: 1.25,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Quetzal',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -900,7 +921,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 75,
 			ineffectbyaff: 2.5,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Kibble-Gigantopithecus'],
+			foods: ['Kibble-Gigantopithecus', 'Mejoberry', 'Other Berry'],
 			kibble: 'Titanoboa',
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 0.5, //2 in devkit
@@ -913,7 +934,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 75,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Dodo',
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2.5,
@@ -929,7 +950,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 45,
 			ineffectbyaff: 4.166667,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
+			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -948,7 +969,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 22.5,
 			ineffectbyaff: 1.333333,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Rare Flower'],
+			foods: ['Rare Flower', 'Mejoberry', 'Other Berry'],
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2.0,
 			nonviolentfoodaffinitymultiplier: 1.6
@@ -1018,7 +1039,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 100,
 			ineffectbyaff: 1.875,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Spino',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1037,7 +1058,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 65,
 			ineffectbyaff: 2.5,
 			basefood: 'Mejoberry',
-			foods: ['Mejoberry', 'Other Berry', 'Kibble-Generic'],
+			foods: ['Kibble-Generic', 'Mejoberry', 'Other Berry'],
 			kibble: 'Dodo',
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2,
@@ -1053,7 +1074,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 600,
 			ineffectbyaff: 0.06,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime', 'Kibble-Mosasaurus'],
+			foods: ['Kibble-Mosasaurus'].concat(Carnivore_Foods_No_Kibble),
 			kibble: 'Quetzal',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1072,7 +1093,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 90,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: ['Raw Meat', 'Raw Prime Meat', 'C/J Prime'],
+			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Non-Violent'],
 			nonviolentfoodratemultiplier: 2.0,
 			nonviolentfoodaffinitymultiplier: 1.0
@@ -1087,7 +1108,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 42.0,
 			ineffectbyaff: 16.666668,
 			basefood: 'Dodo Egg',
-			foods: ['Dodo Egg', 'Giga Egg', 'Quetz Egg', 'Rex Egg', 'Spino Egg', 'Bronto Egg', 'Carno Egg'],
+			foods: ['Giga Egg', 'Quetz Egg', 'Rex Egg', 'Spino Egg', 'Bronto Egg', 'Carno Egg', 'Dodo Egg'],
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
 				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
@@ -1173,7 +1194,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60.0,
 			ineffectbyaff: 3.125,
 			basefood: 'Raw Fish',
-			foods: ['Raw Fish', 'Prime Fish', 'Kibble-Generic'],
+			foods: ['Kibble-Generic', 'Raw Prime Fish', 'Raw Fish'],
 			kibble: 'Compy',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1217,7 +1238,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 250,
 			ineffectbyaff: 0.75,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Rex',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1259,7 +1280,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60,
 			ineffectbyaff: 3.125,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Dodo',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1303,7 +1324,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 300,
 			ineffectbyaff: 0.9375,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Rex',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1327,7 +1348,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60,
 			ineffectbyaff: 3.125,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Parasaur',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1350,7 +1371,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 1.25,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Scorp',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1372,7 +1393,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 60,
 			ineffectbyaff: 3.125,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Bronto',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1395,7 +1416,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 75,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Trike',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1417,7 +1438,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 150,
 			ineffectbyaff: 1.5,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Argent',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1461,7 +1482,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			affinityperlevel: 85.0,
 			ineffectbyaff: 2.5,
 			basefood: 'Raw Meat',
-			foods: Default_Carnivore_Foods,
+			foods: Carnivore_Foods_Default,
 			kibble: 'Gallimimus',
 			tamingmethods: ['Standard'],
 			damagemultipliers: {
@@ -1518,10 +1539,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$rootScope.pagetitle = "ARK Taming Calculator";
-
-	$scope.tablevisibility = $cookies.getObject('tablevisibility');
-	if ($scope.tablevisibility == undefined || $scope.tablevisibility.version!= Version) {
+	$scope.tablevisibility = $cookies.getObject(Cookies_Prefix + 'tablevisibility');
+	if ($scope.tablevisibility == undefined || $scope.tablevisibility.version != Version) {
 		$scope.tablevisibility = {
 			"version": Version,
 			"Creature": true,
@@ -1533,18 +1552,18 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$scope.showextratamedetails = $cookies.getObject("showextratamedetails");
+	$scope.showextratamedetails = $cookies.getObject(Cookies_Prefix + 'showextratamedetails');
 	if ($scope.showextratamedetails == undefined) {
 		$scope.showextratamedetails = 0;
 	}
 
-	$scope.showanimations = $cookies.getObject("showanimations");
+	$scope.showanimations = $cookies.getObject(Cookies_Prefix + 'showanimations');
 	if ($scope.showanimations == undefined) {
 		$scope.showanimations = 1;
 	}
 	$animate.enabled($scope.showanimations);
 
-	$scope.showoldselects = $cookies.getObject("showoldselects");
+	$scope.showoldselects = $cookies.getObject(Cookies_Prefix + 'showoldselects');
 	if ($scope.showoldselects == undefined) {
 		$scope.showoldselects = 0;
 	}
@@ -1553,8 +1572,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.tcoefficient = 22.39671632; //25.7837826; //18.62553525; //24.7933173692763; //21.93040668;
 
 	//Value relating to the creature being tamed
-	$scope.creature = $cookies.getObject('creature');
-	if ($scope.creature == undefined || !($scope.creature.name in $scope.creatures) || $scope.creature.version!= Version) {
+	$scope.creature = $cookies.getObject(Cookies_Prefix + 'creature');
+	if ($scope.creature == undefined || !($scope.creature.name in $scope.creatures) || $scope.creature.version != Version) {
 		$scope.creature = {
 			version: Version,
 			searchname: "Allosaurus",
@@ -1608,8 +1627,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	}
 
 	//Knocking out related variables
-	$scope.ko = $cookies.getObject("ko");
-	if ($scope.ko == undefined || $scope.ko.version!= Version) {
+	$scope.ko = $cookies.getObject(Cookies_Prefix + 'ko');
+	if ($scope.ko == undefined || $scope.ko.version != Version) {
 		$scope.ko = {
 			version: Version,
 			koweapondam: 100,
@@ -1626,23 +1645,23 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.showhidetable = function(table) {
 		$scope.tablevisibility[table] = !$scope.tablevisibility[table];
 		var now = new Date();
-		$cookies.putObject('tablevisibility', $scope.tablevisibility, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+		$cookies.putObject(Cookies_Prefix + 'tablevisibility', $scope.tablevisibility, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
 	$scope.showhideextratamedetails = function() {
 		var now = new Date();
-		$cookies.putObject('showextratamedetails', $scope.showextratamedetails, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+		$cookies.putObject(Cookies_Prefix + 'showextratamedetails', $scope.showextratamedetails, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
 	$scope.showhideoldselects = function() {
 		var now = new Date();
-		$cookies.putObject('showoldselects', $scope.showoldselects, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+		$cookies.putObject(Cookies_Prefix + 'showoldselects', $scope.showoldselects, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 	}
 
 	$scope.showhideanimations = function() {
 		var now = new Date();
 		$animate.enabled($scope.showanimations);
-		$cookies.putObject('showanimations', $scope.showanimations, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+		$cookies.putObject(Cookies_Prefix + 'showanimations', $scope.showanimations, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 		if ($scope.showanimations == 0) {
 			alert("Refresh the page");
 		}
@@ -1694,7 +1713,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 	$scope.selectlevel = function() {
 		creature = $scope.creature;
-		$rootScope.pagetitle = creature.level+" "+creature.name+" - Ark Taming Calculator";
+		$rootScope.pagetitle = "Tame: " + creature.level + " " + creature.name + " | Crumplecorn's Taming: Evolved";
 		if (creature.level>2000) {
 			creature.level = 2000;
 		}
@@ -1707,7 +1726,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		creature.torpor = creaturedata.basetorpor+creaturedata.basetorpor*creaturedata.torporperlevel*(creature.level-1);
 		creature.torporrate = creaturedata.basetorporrate+Math.pow(creature.level-1,$scope.texponent)/($scope.tcoefficient/creaturedata.basetorporrate);
 		var now = new Date();
-		$cookies.putObject('creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+		$cookies.putObject(Cookies_Prefix + 'creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 		$scope.maxfoodcalc();
 		$scope.alltimescalc();
 		$scope.foodcalc();
@@ -1718,7 +1737,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.settamingmethod = function() { //General purpose function-caller function for a few fields
 		if ($scope.creature.tamingmultiplier > 0 && $scope.creature.foodratemultiplier > 0) { //Necessary to prevent endless loop
 			var now = new Date();
-			$cookies.putObject('creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+			$cookies.putObject(Cookies_Prefix + 'creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 
 			$scope.maxfoodcalc();
 			$scope.foodcalc();
@@ -1788,12 +1807,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 			for (var i = 0; i < creaturedata.foods.length; i++) {
 				
-				affinity+= foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*foodamounts[creaturedata.foods[i]];
-				food-= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
+				affinity += foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*foodamounts[creaturedata.foods[i]];
+				food -= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
 			}
 			foodamounts[creature.fillfood] = Math.max(Math.ceil((creature.requiredaffinity-affinity)/foods[creature.fillfood].affinity/(creature.tamingmultiplier*Taming_Multiplier_Modifier)),0);
-			affinity+= foods[creature.fillfood].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*foodamounts[creature.fillfood];
-			food-= foods[creature.fillfood].food*foodamounts[creature.fillfood];
+			affinity += foods[creature.fillfood].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*foodamounts[creature.fillfood];
+			food -= foods[creature.fillfood].food*foodamounts[creature.fillfood];
 			creature.totalfood = -food;
 			creature.suppliedaffinity = affinity;
 
@@ -1803,12 +1822,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 			for (var i = 0; i < creaturedata.foods.length; i++) {
 				
-				affinity+= foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creaturedata.foods[i]];
-				food-= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
+				affinity += foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creaturedata.foods[i]];
+				food -= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
 			}
 			foodamounts[creature.fillfood] = Math.max(Math.ceil((creature.requiredaffinity-affinity)/foods[creature.fillfood].affinity/(creature.tamingmultiplier*Taming_Multiplier_Modifier)/creaturedata.nonviolentfoodaffinitymultiplier),0);
-			affinity+= foods[creature.fillfood].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creature.fillfood];
-			food-= foods[creature.fillfood].food*foodamounts[creature.fillfood];
+			affinity += foods[creature.fillfood].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creature.fillfood];
+			food -= foods[creature.fillfood].food*foodamounts[creature.fillfood];
 			creature.totalfood = -food;
 			creature.suppliedaffinity = affinity;
 
@@ -1858,12 +1877,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			}
 			if ($scope.narcoticstiming.currenttorpor+suppliedtorpor+(narcoticstimes[method]*narcoticsmethod.rate)>$scope.creature.torpor) {
 				//Here we check if the current method brings us over the max possible torpor, and cut off the time if it does
-				suppliedtime+= ($scope.creature.torpor-$scope.narcoticstiming.currenttorpor+suppliedtorpor)/narcoticsmethod.rate;
+				suppliedtime += ($scope.creature.torpor-$scope.narcoticstiming.currenttorpor+suppliedtorpor)/narcoticsmethod.rate;
 				suppliedtorpor = $scope.creature.torpor-$scope.narcoticstiming.currenttorpor;
 				break;
 			} else {
-				suppliedtime+= narcoticstimes[method];
-				suppliedtorpor+= narcoticstimes[method]*narcoticsmethod.rate;
+				suppliedtime += narcoticstimes[method];
+				suppliedtorpor += narcoticstimes[method]*narcoticsmethod.rate;
 			}
 		}
 		$scope.narcoticstiming.topupnarcotics = Math.ceil(($scope.creature.torpor-$scope.narcoticstiming.currenttorpor-suppliedtorpor)/narcoticsmethod.torpor);
@@ -1874,7 +1893,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.supplynarcotic = function() {
 		var narcoticsmethod = $scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
 		var narcoticstimes = $scope.narcoticstiming.narcoticstimes;
-		narcoticstimes[$scope.narcotics.narcoticsmethod]+= $scope.narcoticstiming.supplynarcoticamount*narcoticsmethod.time;
+		narcoticstimes[$scope.narcotics.narcoticsmethod] += $scope.narcoticstiming.supplynarcoticamount*narcoticsmethod.time;
 	}
 
 	$scope.narcoticstimer = function() {
@@ -1888,7 +1907,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 					}
 					if (narcoticstimes[method]>0) {
 						narcoticstimes[method] = Math.max(0, narcoticstimes[method]-1);
-						$scope.narcoticstiming.currenttorpor+= $scope.narcoticsmethods[method].rate;
+						$scope.narcoticstiming.currenttorpor += $scope.narcoticsmethods[method].rate;
 						if ($scope.narcoticstiming.currenttorpor>$scope.creature.torpor) {
 							$scope.narcoticstiming.currenttorpor = $scope.creature.torpor;
 							for (method in narcoticstimes) {
@@ -1900,7 +1919,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 					}
 				}
 				if (!narcoticsapplied) {
-					$scope.narcoticstiming.currenttorpor+= $scope.creature.torporrate;
+					$scope.narcoticstiming.currenttorpor += $scope.creature.torporrate;
 				}
 				$scope.narcoticstimingcalc();
 				if ($scope.narcoticstiming.currenttorpor<= 0) {
@@ -1911,9 +1930,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 				}
 				if ($scope.narcoticstiming.alarm == 1 && $scope.narcoticstiming.buffertime/60<$scope.narcoticstiming.alarmthreshold) {
 					$scope.narcoticstiming.alarm = 0;
-					var audio = new Audio('assets/audio/alarm.mp3');
-					audio.volume = 0.3;
-					audio.play();
+          Audio_Alarm.volume = Audio_Volume;
+					Audio_Alarm.play();
 				}
 			}, 1000);
 		} else {
@@ -1936,7 +1954,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.starvetimer = function() {
 		if ($scope.starvetiming.time == true) {
 			$scope.starvetiming.intervalid = $interval(function() {
-				$scope.starvetiming.currentfood+= $scope.creatures[$scope.creature.name].foodrate*$scope.creature.foodratemultiplier;
+				$scope.starvetiming.currentfood += $scope.creatures[$scope.creature.name].foodrate*$scope.creature.foodratemultiplier;
 				$scope.starvetimingcalc();
 				/*if ($scope.starvetiming.currentfood<= 0) {
 					$scope.starvetiming.currentfood = 0;
@@ -1944,11 +1962,10 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 					$scope.starvetiming.time = false;
 					$scope.starvetimer();
 				}*/
-				if ($scope.starvetiming.alarm == 1 && $scope.starvetiming.starvetime/60<$scope.starvetiming.alarmthreshold) {
+				if ($scope.starvetiming.alarm == 1 && $scope.starvetiming.starvetime / 60 < $scope.starvetiming.alarmthreshold) {
 					$scope.starvetiming.alarm = 0;
-					var audio = new Audio('assets/audio/alarm.mp3');
-					audio.volume = 0.3;
-					audio.play();
+          Audio_Alarm.volume = Audio_Volume;
+					Audio_Alarm.play();
 				}
 			}, 1000);
 		} else {
@@ -1975,7 +1992,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 				var food = foodprioritylist[i];
 				while (fedfood[food]<foodamounts[food]) {
 					fedfood[food]++;
-					effectiveness-= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/100;
+					effectiveness -= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/100;
 				}
 			}
 
@@ -1987,7 +2004,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 				var food = foodprioritylist[i];
 				while (fedfood[food]<foodamounts[food]) {
 					fedfood[food]++;
-					effectiveness-= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier/100;
+					effectiveness -= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier/100;
 				}
 			}
 
@@ -2006,17 +2023,17 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			var torpor = komethod.torpor*$scope.creatures[$scope.creature.name].hitboxes[hitbox];
 			var damage = komethod.damage*$scope.creatures[$scope.creature.name].hitboxes[hitbox];
 			if (komethod.usesmeleedam) {
-				torpor*= $scope.ko.komeleedam/100;
-				damage*= $scope.ko.komeleedam/100;
+				torpor *= $scope.ko.komeleedam/100;
+				damage *= $scope.ko.komeleedam/100;
 			}
 			if (komethod.usesweapondam) {
-				torpor*= $scope.ko.koweapondam/100;
-				damage*= $scope.ko.koweapondam/100;
+				torpor *= $scope.ko.koweapondam/100;
+				damage *= $scope.ko.koweapondam/100;
 			}
 			for (i = 0; i<komethod.damagetypes.length; i++) {
 				if (komethod.damagetypes[i] in $scope.creatures[$scope.creature.name].damagemultipliers) {
-					torpor*= $scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
-					damage*= $scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
+					torpor *= $scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
+					damage *= $scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
 				}
 			}
 			$scope.ko.kotorpor[hitbox] = torpor;
@@ -2026,7 +2043,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 
 		var now = new Date();
-		$cookies.putObject('ko', $scope.ko, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
+		$cookies.putObject(Cookies_Prefix + 'ko', $scope.ko, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 
 		/*for (hitbox in $scope.creatures[$scope.creature.name].hitboxes) {
 			$scope.ko.koquantities[hitbox] = Math.ceil($scope.creature.torpor/$scope.komethodtorpor[$scope.ko.komethod]/$scope.creatures[$scope.creature.name].projectiledamage/$scope.ko.kodamagemultiplier/$scope.creatures[$scope.creature.name].hitboxes[hitbox]);
@@ -2045,6 +2062,6 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.maxfoodcalc();
 	$scope.alltimescalc();
 	$scope.foodcalc();
-	$rootScope.pagetitle = "ARK Taming Calculator";
+	$rootScope.pagetitle = "Crumplecorn: Evolved";
 
 }]);
