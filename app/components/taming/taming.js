@@ -1,6 +1,8 @@
 angular.module('TamingModule', []).controller('TamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
 
-	$scope.foods={
+  $scope.tamingMultiplierModifier = 2.0;
+
+	$scope.foods = {
 		'Kibble-Generic': {
 			food: 79.98,
 			affinity: 400
@@ -156,7 +158,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 	}
 
-	$scope.foodprioritylist=[
+	$scope.foodprioritylist = [
 		'Kibble-Generic',
 		'Kibble-Gigantopithecus',
 		'Kibble-Bronto',
@@ -196,7 +198,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		'Rare Flower'
 	];
 
-	$scope.komethods={
+	$scope.komethods = {
 
 		/*'Bow': 20*2+20*2.5,
 		'Crossbow': 35*2+35*2.5,
@@ -368,7 +370,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 	};
 
-	$scope.narcoticsmethods={
+	$scope.narcoticsmethods = {
 		"Narcotics": {
 			torpor: 40,
 			time: 8,
@@ -381,7 +383,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$scope.creatures={
+	$scope.creatures = {
 
 		Allosaurus: {
 			foodrate: -0.001852*180.063385,
@@ -1505,11 +1507,11 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$rootScope.pagetitle="ARK Taming Calculator";
+	$rootScope.pagetitle = "ARK Taming Calculator";
 
-	$scope.tablevisibility=$cookies.getObject('tablevisibility');
-	if ($scope.tablevisibility==undefined || $scope.tablevisibility.version!="20160131") {
-		$scope.tablevisibility={
+	$scope.tablevisibility = $cookies.getObject('tablevisibility');
+	if ($scope.tablevisibility == undefined || $scope.tablevisibility.version!= "20160131") {
+		$scope.tablevisibility = {
 			"version": "20160131",
 			"Creature": true,
 			"Food": true,
@@ -1520,29 +1522,29 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$scope.showextratamedetails=$cookies.getObject("showextratamedetails");
-	if ($scope.showextratamedetails==undefined) {
-		$scope.showextratamedetails=0;
+	$scope.showextratamedetails = $cookies.getObject("showextratamedetails");
+	if ($scope.showextratamedetails == undefined) {
+		$scope.showextratamedetails = 0;
 	}
 
-	$scope.showanimations=$cookies.getObject("showanimations");
-	if ($scope.showanimations==undefined) {
-		$scope.showanimations=1;
+	$scope.showanimations = $cookies.getObject("showanimations");
+	if ($scope.showanimations == undefined) {
+		$scope.showanimations = 1;
 	}
 	$animate.enabled($scope.showanimations);
 
-	$scope.showoldselects=$cookies.getObject("showoldselects");
-	if ($scope.showoldselects==undefined) {
-		$scope.showoldselects=0;
+	$scope.showoldselects = $cookies.getObject("showoldselects");
+	if ($scope.showoldselects == undefined) {
+		$scope.showoldselects = 0;
 	}
 
-	$scope.texponent=0.800403041; //0.829050872; //0.76593984; //0.827745067192723; //0.8107032;
-	$scope.tcoefficient=22.39671632; //25.7837826; //18.62553525; //24.7933173692763; //21.93040668;
+	$scope.texponent = 0.800403041; //0.829050872; //0.76593984; //0.827745067192723; //0.8107032;
+	$scope.tcoefficient = 22.39671632; //25.7837826; //18.62553525; //24.7933173692763; //21.93040668;
 
 	//Value relating to the creature being tamed
-	$scope.creature=$cookies.getObject('creature');
-	if ($scope.creature==undefined || !($scope.creature.name in $scope.creatures) || $scope.creature.version!="20160131") {
-		$scope.creature={
+	$scope.creature = $cookies.getObject('creature');
+	if ($scope.creature == undefined || !($scope.creature.name in $scope.creatures) || $scope.creature.version!= "20160131") {
+		$scope.creature = {
 			version: "20160131",
 			searchname: "Ankylosaurus",
 			name: "Ankylosaurus",
@@ -1556,7 +1558,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	}
 
 	//Narcotics related constants for this creature/level
-	$scope.narcotics={
+	$scope.narcotics = {
 		buffertime: 0,
 		max: 0,
 		min: 0,
@@ -1566,7 +1568,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	};
 
 	//Narcotics related variables depending on creature's actual state
-	$scope.narcoticstiming={
+	$scope.narcoticstiming = {
 		start: new Date(),
 		topupnarcotics: 0,
 		currenttorpor: 0,
@@ -1583,7 +1585,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	};
 
 	//Starve Timing Variables
-	$scope.starvetiming={
+	$scope.starvetiming = {
 		start: new Date(),
 		maxfood: 0,
 		currentfood: 0,
@@ -1595,9 +1597,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	}
 
 	//Knocking out related variables
-	$scope.ko=$cookies.getObject("ko");
-	if ($scope.ko==undefined || $scope.ko.version!="20160131") {
-		$scope.ko={
+	$scope.ko = $cookies.getObject("ko");
+	if ($scope.ko == undefined || $scope.ko.version!= "20160131") {
+		$scope.ko = {
 			version: "20160131",
 			koweapondam: 100,
 			komeleedam: 100,
@@ -1610,89 +1612,89 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$scope.showhidetable=function(table) {
-		$scope.tablevisibility[table]=!$scope.tablevisibility[table];
-		var now=new Date();
+	$scope.showhidetable = function(table) {
+		$scope.tablevisibility[table] = !$scope.tablevisibility[table];
+		var now = new Date();
 		$cookies.putObject('tablevisibility', $scope.tablevisibility, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
 	}
 
-	$scope.showhideextratamedetails=function() {
-		var now=new Date();
+	$scope.showhideextratamedetails = function() {
+		var now = new Date();
 		$cookies.putObject('showextratamedetails', $scope.showextratamedetails, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
 	}
 
-	$scope.showhideoldselects=function() {
-		var now=new Date();
+	$scope.showhideoldselects = function() {
+		var now = new Date();
 		$cookies.putObject('showoldselects', $scope.showoldselects, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
 	}
 
-	$scope.showhideanimations=function() {
-		var now=new Date();
+	$scope.showhideanimations = function() {
+		var now = new Date();
 		$animate.enabled($scope.showanimations);
 		$cookies.putObject('showanimations', $scope.showanimations, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
-		if ($scope.showanimations==0) {
+		if ($scope.showanimations == 0) {
 			alert("Refresh the page");
 		}
 	}
 
-	$scope.filterFoods=function(item) {
+	$scope.filterFoods = function(item) {
 		return ($scope.foodamounts[item]>0);
 	}
 
-	$scope.searchdino=function() {
+	$scope.searchdino = function() {
 		//alert("searchdino");
-		var creature=$scope.creature;
-		var creatures=$scope.creatures;
+		var creature = $scope.creature;
+		var creatures = $scope.creatures;
 
 		if (creature.searchname in creatures) {
-			creature.name=creature.searchname;
+			creature.name = creature.searchname;
 			$scope.selectdino();
 		}
 	}
 
-	$scope.searchkomethod=function() {
-		var ko=$scope.ko;
-		var komethods=$scope.komethods;
+	$scope.searchkomethod = function() {
+		var ko = $scope.ko;
+		var komethods = $scope.komethods;
 		if (ko.searchkomethod in komethods) {
-			ko.komethod=ko.searchkomethod;
+			ko.komethod = ko.searchkomethod;
 			$scope.knockoutcalc();
 		}
 	}
 
-	$scope.selectdino=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
+	$scope.selectdino = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
 
-		creature.searchname=creature.name; //Ensure the searchname is kept up to date
+		creature.searchname = creature.name; //Ensure the searchname is kept up to date
 
-		creature.suppliedaffinity=0;
-		if (creaturedata.foods.indexOf(creature.fillfood) == -1 ) {
-			creature.fillfood=creaturedata.foods[0];
+		creature.suppliedaffinity = 0;
+		if (creaturedata.foods.indexOf(creature.fillfood)  ==  -1 ) {
+			creature.fillfood = creaturedata.foods[0];
 		}
-		if (creaturedata.tamingmethods.indexOf(creature.tamingmethod) == -1 ) {
-			creature.tamingmethod=creaturedata.tamingmethods[0];
+		if (creaturedata.tamingmethods.indexOf(creature.tamingmethod)  ==  -1 ) {
+			creature.tamingmethod = creaturedata.tamingmethods[0];
 		}
 
 		$scope.resetfoods();
-		$scope.narcoticstiming.time=false;
+		$scope.narcoticstiming.time = false;
 		$scope.narcoticstimer();
 		$scope.selectlevel();
 	}
 
-	$scope.selectlevel=function() {
-		creature=$scope.creature;
-		$rootScope.pagetitle=creature.level+" "+creature.name+" - Ark Taming Calculator";
+	$scope.selectlevel = function() {
+		creature = $scope.creature;
+		$rootScope.pagetitle = creature.level+" "+creature.name+" - Ark Taming Calculator";
 		if (creature.level>2000) {
-			creature.level=2000;
+			creature.level = 2000;
 		}
 		if (isNaN(creature.level) || creature.level<1) {
 			return;
 		}
 
-		creaturedata=$scope.creatures[creature.name];
-		creature.requiredaffinity=creaturedata.baseaffinity+creaturedata.affinityperlevel*creature.level;
-		creature.torpor=creaturedata.basetorpor+creaturedata.basetorpor*creaturedata.torporperlevel*(creature.level-1);
-		creature.torporrate=creaturedata.basetorporrate+Math.pow(creature.level-1,$scope.texponent)/($scope.tcoefficient/creaturedata.basetorporrate);
+		creaturedata = $scope.creatures[creature.name];
+		creature.requiredaffinity = creaturedata.baseaffinity+creaturedata.affinityperlevel*creature.level;
+		creature.torpor = creaturedata.basetorpor+creaturedata.basetorpor*creaturedata.torporperlevel*(creature.level-1);
+		creature.torporrate = creaturedata.basetorporrate+Math.pow(creature.level-1,$scope.texponent)/($scope.tcoefficient/creaturedata.basetorporrate);
 		var now = new Date();
 		$cookies.putObject('creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
 		$scope.maxfoodcalc();
@@ -1702,8 +1704,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		$scope.starvetimingcalc();
 	}
 
-	$scope.settamingmethod=function() { //General purpose function-caller function for a few fields
-		if ($scope.creature.tamingmultiplier>0 && $scope.creature.foodratemultiplier>0) { //Necessary to prevent endless loop
+	$scope.settamingmethod = function() { //General purpose function-caller function for a few fields
+		if ($scope.creature.tamingmultiplier > 0 && $scope.creature.foodratemultiplier > 0) { //Necessary to prevent endless loop
 			var now = new Date();
 			$cookies.putObject('creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
 
@@ -1713,91 +1715,91 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
-	$scope.setFillFood=function(food) {
-		$scope.foodamounts[$scope.creature.fillfood]=0;
-		$scope.creature.fillfood=food;
+	$scope.setFillFood = function(food) {
+		$scope.foodamounts[$scope.creature.fillfood] = 0;
+		$scope.creature.fillfood = food;
 		$scope.foodcalc();
 	}
 
-	$scope.resetfoods=function() {
-		$scope.foodamounts={};
+	$scope.resetfoods = function() {
+		$scope.foodamounts = {};
 		for (var food in $scope.foods) {
-			$scope.foodamounts[food]=0;
+			$scope.foodamounts[food] = 0;
 		}
 	}
 
-	$scope.maxfoodcalc=function() {
-		$scope.maxfoodamounts={};
+	$scope.maxfoodcalc = function() {
+		$scope.maxfoodamounts = {};
 
-		if (creature.tamingmethod=="Standard") {
+		if (creature.tamingmethod == "Standard") {
 
 			for (var food in $scope.foods) {
-				$scope.maxfoodamounts[food]=Math.ceil(creature.requiredaffinity/$scope.foods[food].affinity/creature.tamingmultiplier);
+				$scope.maxfoodamounts[food] = Math.ceil(creature.requiredaffinity / $scope.foods[food].affinity / (creature.tamingmultiplier*$scope.tamingMultiplierModifier) );
 			}
 
 		}
 
-		if (creature.tamingmethod=="Non-Violent") {
+		if (creature.tamingmethod == "Non-Violent") {
 
 			for (var food in $scope.foods) {
-				$scope.maxfoodamounts[food]=Math.ceil(creature.requiredaffinity/$scope.foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier);
+				$scope.maxfoodamounts[food] = Math.ceil(creature.requiredaffinity/$scope.foods[food].affinity/(creature.tamingmultiplier*$scope.tamingMultiplierModifier)/creaturedata.nonviolentfoodaffinitymultiplier);
 			}
 
 		}
 	}
 
-	$scope.alltimescalc=function() {
-		$scope.times={};
+	$scope.alltimescalc = function() {
+		$scope.times = {};
 
-		if ($scope.creature.tamingmethod=="Standard") {
-			$scope.creature.foodrate=$scope.creatures[$scope.creature.name].foodrate*$scope.creature.foodratemultiplier;
+		if ($scope.creature.tamingmethod == "Standard") {
+			$scope.creature.foodrate = $scope.creatures[$scope.creature.name].foodrate * $scope.creature.foodratemultiplier;
 		}
-		if (creature.tamingmethod=="Non-Violent") {
-			$scope.creature.foodrate=$scope.creatures[$scope.creature.name].foodrate*$scope.creature.foodratemultiplier*$scope.creatures[$scope.creature.name].nonviolentfoodratemultiplier;
+		if (creature.tamingmethod == "Non-Violent") {
+			$scope.creature.foodrate = $scope.creatures[$scope.creature.name].foodrate * $scope.creature.foodratemultiplier * $scope.creatures[$scope.creature.name].nonviolentfoodratemultiplier;
 		}
 
 		for (var food in $scope.maxfoodamounts) {
-			$scope.times[food]=$scope.maxfoodamounts[food]*-$scope.foods[food].food/$scope.creature.foodrate;
+			$scope.times[food] = $scope.maxfoodamounts[food]*-$scope.foods[food].food/$scope.creature.foodrate;
 		}
 
 	}
 
-	$scope.foodcalc=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
-		foods=$scope.foods;
-		foodamounts=$scope.foodamounts;
-		affinity=0;
-		food=0;
-		foodamounts[creature.fillfood]=0;
+	$scope.foodcalc = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
+		foods = $scope.foods;
+		foodamounts = $scope.foodamounts;
+		affinity = 0;
+		food = 0;
+		foodamounts[creature.fillfood] = 0;
 
-		if (creature.tamingmethod=="Standard") {
+		if (creature.tamingmethod == "Standard") {
 
 			for (var i = 0; i < creaturedata.foods.length; i++) {
 				
-				affinity+=foods[creaturedata.foods[i]].affinity*creature.tamingmultiplier*foodamounts[creaturedata.foods[i]];
-				food-=foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
+				affinity+= foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*$scope.tamingMultiplierModifier)*foodamounts[creaturedata.foods[i]];
+				food-= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
 			}
-			foodamounts[creature.fillfood]=Math.max(Math.ceil((creature.requiredaffinity-affinity)/foods[creature.fillfood].affinity/creature.tamingmultiplier),0);
-			affinity+=foods[creature.fillfood].affinity*creature.tamingmultiplier*foodamounts[creature.fillfood];
-			food-=foods[creature.fillfood].food*foodamounts[creature.fillfood];
-			creature.totalfood=-food;
-			creature.suppliedaffinity=affinity;
+			foodamounts[creature.fillfood] = Math.max(Math.ceil((creature.requiredaffinity-affinity)/foods[creature.fillfood].affinity/(creature.tamingmultiplier*$scope.tamingMultiplierModifier)),0);
+			affinity+= foods[creature.fillfood].affinity*(creature.tamingmultiplier*$scope.tamingMultiplierModifier)*foodamounts[creature.fillfood];
+			food-= foods[creature.fillfood].food*foodamounts[creature.fillfood];
+			creature.totalfood = -food;
+			creature.suppliedaffinity = affinity;
 
 		}
 
-		if (creature.tamingmethod=="Non-Violent") {
+		if (creature.tamingmethod == "Non-Violent") {
 
 			for (var i = 0; i < creaturedata.foods.length; i++) {
 				
-				affinity+=foods[creaturedata.foods[i]].affinity*creature.tamingmultiplier*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creaturedata.foods[i]];
-				food-=foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
+				affinity+= foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*$scope.tamingMultiplierModifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creaturedata.foods[i]];
+				food-= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
 			}
-			foodamounts[creature.fillfood]=Math.max(Math.ceil((creature.requiredaffinity-affinity)/foods[creature.fillfood].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier),0);
-			affinity+=foods[creature.fillfood].affinity*creature.tamingmultiplier*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creature.fillfood];
-			food-=foods[creature.fillfood].food*foodamounts[creature.fillfood];
-			creature.totalfood=-food;
-			creature.suppliedaffinity=affinity;
+			foodamounts[creature.fillfood] = Math.max(Math.ceil((creature.requiredaffinity-affinity)/foods[creature.fillfood].affinity/(creature.tamingmultiplier*$scope.tamingMultiplierModifier)/creaturedata.nonviolentfoodaffinitymultiplier),0);
+			affinity+= foods[creature.fillfood].affinity*(creature.tamingmultiplier*$scope.tamingMultiplierModifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creature.fillfood];
+			food-= foods[creature.fillfood].food*foodamounts[creature.fillfood];
+			creature.totalfood = -food;
+			creature.suppliedaffinity = affinity;
 
 		}		
 
@@ -1807,223 +1809,223 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 	}
 
-	$scope.totaltimecalc=function() {
-		creature=$scope.creature;
-		creaturedata=$scope.creatures[creature.name];
-		if (creature.tamingmethod=="Standard") {
-			$scope.totaltime=food/creaturedata.foodrate/creature.foodratemultiplier;
+	$scope.totaltimecalc = function() {
+		creature = $scope.creature;
+		creaturedata = $scope.creatures[creature.name];
+		if (creature.tamingmethod == "Standard") {
+			$scope.totaltime = food/creaturedata.foodrate/creature.foodratemultiplier;
 			$scope.narcoticscalc();
 		}
 
-		if (creature.tamingmethod=="Non-Violent") {
-			$scope.totaltime=food/creaturedata.foodrate/creature.foodratemultiplier/creaturedata.nonviolentfoodratemultiplier;
+		if (creature.tamingmethod == "Non-Violent") {
+			$scope.totaltime = food/creaturedata.foodrate/creature.foodratemultiplier/creaturedata.nonviolentfoodratemultiplier;
 		}
 	}
 
-	$scope.narcoticscalc=function() {
-		var narcoticsmethod=$scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
-		$scope.narcotics.buffertime=$scope.creature.torpor/-$scope.creature.torporrate;
-		$scope.narcotics.max=Math.ceil($scope.totaltime*-$scope.creature.torporrate/(narcoticsmethod.torpor-$scope.creature.torporrate*narcoticsmethod.time));
-		$scope.narcotics.min=Math.max(Math.ceil(($scope.totaltime*-$scope.creature.torporrate-$scope.creature.torpor)/(narcoticsmethod.torpor-$scope.creature.torporrate*narcoticsmethod.time)), 0);
-		$scope.narcotics.buffernarcotics=Math.ceil($scope.creature.torpor/narcoticsmethod.torpor);
-		$scope.narcotics.narcoticsbuffertime=narcoticsmethod.time*$scope.narcotics.buffernarcotics;
-		if ($scope.narcoticstiming.time==false) {
-			$scope.narcoticstiming.currenttorpor=$scope.creature.torpor;
+	$scope.narcoticscalc = function() {
+		var narcoticsmethod = $scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
+		$scope.narcotics.buffertime = $scope.creature.torpor/-$scope.creature.torporrate;
+		$scope.narcotics.max = Math.ceil($scope.totaltime*-$scope.creature.torporrate/(narcoticsmethod.torpor-$scope.creature.torporrate*narcoticsmethod.time));
+		$scope.narcotics.min = Math.max(Math.ceil(($scope.totaltime*-$scope.creature.torporrate-$scope.creature.torpor)/(narcoticsmethod.torpor-$scope.creature.torporrate*narcoticsmethod.time)), 0);
+		$scope.narcotics.buffernarcotics = Math.ceil($scope.creature.torpor/narcoticsmethod.torpor);
+		$scope.narcotics.narcoticsbuffertime = narcoticsmethod.time*$scope.narcotics.buffernarcotics;
+		if ($scope.narcoticstiming.time == false) {
+			$scope.narcoticstiming.currenttorpor = $scope.creature.torpor;
 		}
 		$scope.narcoticstimingcalc();
 	}
 
-	$scope.narcoticstimingcalc=function() {
-		var narcoticsmethod=$scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
-		var narcoticstimes=$scope.narcoticstiming.narcoticstimes;
-		$scope.narcoticstiming.currenttorpor=Math.min($scope.narcoticstiming.currenttorpor, $scope.creature.torpor);
-		var suppliedtime=0;
-		var suppliedtorpor=0;
+	$scope.narcoticstimingcalc = function() {
+		var narcoticsmethod = $scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
+		var narcoticstimes = $scope.narcoticstiming.narcoticstimes;
+		$scope.narcoticstiming.currenttorpor = Math.min($scope.narcoticstiming.currenttorpor, $scope.creature.torpor);
+		var suppliedtime = 0;
+		var suppliedtorpor = 0;
 		for (method in narcoticstimes) {
 			if (!narcoticstimes.hasOwnProperty(method)) {
 				continue;
 			}
 			if ($scope.narcoticstiming.currenttorpor+suppliedtorpor+(narcoticstimes[method]*narcoticsmethod.rate)>$scope.creature.torpor) {
 				//Here we check if the current method brings us over the max possible torpor, and cut off the time if it does
-				suppliedtime+=($scope.creature.torpor-$scope.narcoticstiming.currenttorpor+suppliedtorpor)/narcoticsmethod.rate;
-				suppliedtorpor=$scope.creature.torpor-$scope.narcoticstiming.currenttorpor;
+				suppliedtime+= ($scope.creature.torpor-$scope.narcoticstiming.currenttorpor+suppliedtorpor)/narcoticsmethod.rate;
+				suppliedtorpor = $scope.creature.torpor-$scope.narcoticstiming.currenttorpor;
 				break;
 			} else {
-				suppliedtime+=narcoticstimes[method];
-				suppliedtorpor+=narcoticstimes[method]*narcoticsmethod.rate;
+				suppliedtime+= narcoticstimes[method];
+				suppliedtorpor+= narcoticstimes[method]*narcoticsmethod.rate;
 			}
 		}
-		$scope.narcoticstiming.topupnarcotics=Math.ceil(($scope.creature.torpor-$scope.narcoticstiming.currenttorpor-suppliedtorpor)/narcoticsmethod.torpor);
-		$scope.narcoticstiming.buffertime=($scope.narcoticstiming.currenttorpor+suppliedtorpor)/-$scope.creature.torporrate;
-		$scope.narcoticstiming.narcoticsbuffertime=suppliedtime;
+		$scope.narcoticstiming.topupnarcotics = Math.ceil(($scope.creature.torpor-$scope.narcoticstiming.currenttorpor-suppliedtorpor)/narcoticsmethod.torpor);
+		$scope.narcoticstiming.buffertime = ($scope.narcoticstiming.currenttorpor+suppliedtorpor)/-$scope.creature.torporrate;
+		$scope.narcoticstiming.narcoticsbuffertime = suppliedtime;
 	}
 
-	$scope.supplynarcotic=function() {
-		var narcoticsmethod=$scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
-		var narcoticstimes=$scope.narcoticstiming.narcoticstimes;
-		narcoticstimes[$scope.narcotics.narcoticsmethod]+=$scope.narcoticstiming.supplynarcoticamount*narcoticsmethod.time;
+	$scope.supplynarcotic = function() {
+		var narcoticsmethod = $scope.narcoticsmethods[$scope.narcotics.narcoticsmethod];
+		var narcoticstimes = $scope.narcoticstiming.narcoticstimes;
+		narcoticstimes[$scope.narcotics.narcoticsmethod]+= $scope.narcoticstiming.supplynarcoticamount*narcoticsmethod.time;
 	}
 
-	$scope.narcoticstimer=function() {
-		var narcoticstimes=$scope.narcoticstiming.narcoticstimes;
-		if ($scope.narcoticstiming.time==true) {
-			$scope.narcoticstiming.intervalid=$interval(function() {
-				var narcoticsapplied=false;
+	$scope.narcoticstimer = function() {
+		var narcoticstimes = $scope.narcoticstiming.narcoticstimes;
+		if ($scope.narcoticstiming.time == true) {
+			$scope.narcoticstiming.intervalid = $interval(function() {
+				var narcoticsapplied = false;
 				for (method in narcoticstimes) {
 					if (!narcoticstimes.hasOwnProperty(method)) {
 						continue;
 					}
 					if (narcoticstimes[method]>0) {
-						narcoticstimes[method]=Math.max(0, narcoticstimes[method]-1);
-						$scope.narcoticstiming.currenttorpor+=$scope.narcoticsmethods[method].rate;
+						narcoticstimes[method] = Math.max(0, narcoticstimes[method]-1);
+						$scope.narcoticstiming.currenttorpor+= $scope.narcoticsmethods[method].rate;
 						if ($scope.narcoticstiming.currenttorpor>$scope.creature.torpor) {
-							$scope.narcoticstiming.currenttorpor=$scope.creature.torpor;
+							$scope.narcoticstiming.currenttorpor = $scope.creature.torpor;
 							for (method in narcoticstimes) {
-								narcoticstimes[method]=0;
+								narcoticstimes[method] = 0;
 							}
 						}
-						narcoticsapplied=true;
+						narcoticsapplied = true;
 						break;
 					}
 				}
 				if (!narcoticsapplied) {
-					$scope.narcoticstiming.currenttorpor+=$scope.creature.torporrate;
+					$scope.narcoticstiming.currenttorpor+= $scope.creature.torporrate;
 				}
 				$scope.narcoticstimingcalc();
-				if ($scope.narcoticstiming.currenttorpor<=0) {
-					$scope.narcoticstiming.currenttorpor=0;
+				if ($scope.narcoticstiming.currenttorpor<= 0) {
+					$scope.narcoticstiming.currenttorpor = 0;
 					$scope.narcoticstimingcalc();
-					$scope.narcoticstiming.time=false;
+					$scope.narcoticstiming.time = false;
 					$scope.narcoticstimer();
 				}
-				if ($scope.narcoticstiming.alarm==1 && $scope.narcoticstiming.buffertime/60<$scope.narcoticstiming.alarmthreshold) {
-					$scope.narcoticstiming.alarm=0;
+				if ($scope.narcoticstiming.alarm == 1 && $scope.narcoticstiming.buffertime/60<$scope.narcoticstiming.alarmthreshold) {
+					$scope.narcoticstiming.alarm = 0;
 					var audio = new Audio('assets/audio/alarm.mp3');
-					audio.volume=0.3;
+					audio.volume = 0.3;
 					audio.play();
 				}
 			}, 1000);
 		} else {
 			$interval.cancel($scope.narcoticstiming.intervalid);
-			$scope.narcoticstiming.intervalid=null;
+			$scope.narcoticstiming.intervalid = null;
 		}
 	}
 
-	$scope.starvetimingcalc=function() {
-		var timedfoodamount=Math.min($scope.creature.totalfood, $scope.starvetiming.maxfood); //We time either the total food required for tame or the max food the dino has, whichever is lower
+	$scope.starvetimingcalc = function() {
+		var timedfoodamount = Math.min($scope.creature.totalfood, $scope.starvetiming.maxfood); //We time either the total food required for tame or the max food the dino has, whichever is lower
 		if ($scope.starvetiming.currentfood>$scope.starvetiming.maxfood) {
-			scope.starvetiming.currentfood=$scope.starvetiming.maxfood;
+			scope.starvetiming.currentfood = $scope.starvetiming.maxfood;
 		}
-		$scope.starvetiming.starvetime=(timedfoodamount-($scope.starvetiming.maxfood-$scope.starvetiming.currentfood))/-$scope.creatures[$scope.creature.name].foodrate/$scope.creature.foodratemultiplier;
-		$scope.starvetiming.starvetime=Math.max($scope.starvetiming.starvetime, 0); //We get a negative time if the target food has already been passed, replace with 0 instead
-		$scope.starvetiming.tametime=($scope.creature.totalfood-($scope.starvetiming.maxfood-$scope.starvetiming.currentfood))/-$scope.creatures[$scope.creature.name].foodrate/$scope.creature.foodratemultiplier;
-		$scope.starvetiming.tametime=Math.max($scope.starvetiming.tametime, 0); //We get a negative time if the target food has already been passed, replace with 0 instead
+		$scope.starvetiming.starvetime = (timedfoodamount-($scope.starvetiming.maxfood-$scope.starvetiming.currentfood))/-$scope.creatures[$scope.creature.name].foodrate/$scope.creature.foodratemultiplier;
+		$scope.starvetiming.starvetime = Math.max($scope.starvetiming.starvetime, 0); //We get a negative time if the target food has already been passed, replace with 0 instead
+		$scope.starvetiming.tametime = ($scope.creature.totalfood-($scope.starvetiming.maxfood-$scope.starvetiming.currentfood))/-$scope.creatures[$scope.creature.name].foodrate/$scope.creature.foodratemultiplier;
+		$scope.starvetiming.tametime = Math.max($scope.starvetiming.tametime, 0); //We get a negative time if the target food has already been passed, replace with 0 instead
 	}
 
-	$scope.starvetimer=function() {
-		if ($scope.starvetiming.time==true) {
-			$scope.starvetiming.intervalid=$interval(function() {
-				$scope.starvetiming.currentfood+=$scope.creatures[$scope.creature.name].foodrate*$scope.creature.foodratemultiplier;
+	$scope.starvetimer = function() {
+		if ($scope.starvetiming.time == true) {
+			$scope.starvetiming.intervalid = $interval(function() {
+				$scope.starvetiming.currentfood+= $scope.creatures[$scope.creature.name].foodrate*$scope.creature.foodratemultiplier;
 				$scope.starvetimingcalc();
-				/*if ($scope.starvetiming.currentfood<=0) {
-					$scope.starvetiming.currentfood=0;
+				/*if ($scope.starvetiming.currentfood<= 0) {
+					$scope.starvetiming.currentfood = 0;
 					$scope.starvetimingcalc();
-					$scope.starvetiming.time=false;
+					$scope.starvetiming.time = false;
 					$scope.starvetimer();
 				}*/
-				if ($scope.starvetiming.alarm==1 && $scope.starvetiming.starvetime/60<$scope.starvetiming.alarmthreshold) {
-					$scope.starvetiming.alarm=0;
+				if ($scope.starvetiming.alarm == 1 && $scope.starvetiming.starvetime/60<$scope.starvetiming.alarmthreshold) {
+					$scope.starvetiming.alarm = 0;
 					var audio = new Audio('assets/audio/alarm.mp3');
-					audio.volume=0.3;
+					audio.volume = 0.3;
 					audio.play();
 				}
 			}, 1000);
 		} else {
 			$interval.cancel($scope.starvetiming.intervalid);
-			$scope.starvetiming.intervalid=null;
+			$scope.starvetiming.intervalid = null;
 		}
 	}
 
-	$scope.effectivenesscalc=function() {
-		var foods=$scope.foods;
-		var foodprioritylist=$scope.foodprioritylist;
-		var foodamounts=$scope.foodamounts;
-		var creature=$scope.creature;
-		var creaturedata=$scope.creatures[creature.name];
-		var effectiveness=100;
-		var fedfood={};
+	$scope.effectivenesscalc = function() {
+		var foods = $scope.foods;
+		var foodprioritylist = $scope.foodprioritylist;
+		var foodamounts = $scope.foodamounts;
+		var creature = $scope.creature;
+		var creaturedata = $scope.creatures[creature.name];
+		var effectiveness = 100;
+		var fedfood = {};
 		for (var food in $scope.foods) {
-			fedfood[food]=0;
+			fedfood[food] = 0;
 		}
 
-		if (creature.tamingmethod=="Standard") {
+		if (creature.tamingmethod == "Standard") {
 
 			for (var i = 0; i < foodprioritylist.length; i++) {
-				var food=foodprioritylist[i];
+				var food = foodprioritylist[i];
 				while (fedfood[food]<foodamounts[food]) {
 					fedfood[food]++;
-					effectiveness-=Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/100;
+					effectiveness-= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/100;
 				}
 			}
 
 		}
 
-		if (creature.tamingmethod=="Non-Violent") {
+		if (creature.tamingmethod == "Non-Violent") {
 
 			for (var i = 0; i < foodprioritylist.length; i++) {
-				var food=foodprioritylist[i];
+				var food = foodprioritylist[i];
 				while (fedfood[food]<foodamounts[food]) {
 					fedfood[food]++;
-					effectiveness-=Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier/100;
+					effectiveness-= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier/100;
 				}
 			}
 
 		}
-		creature.effectiveness=effectiveness;
-		creature.extralevels=Math.floor(creature.level*0.5*creature.effectiveness/100);
+		creature.effectiveness = effectiveness;
+		creature.extralevels = Math.floor(creature.level*0.5*creature.effectiveness/100);
 	}
 
-	$scope.knockoutcalc=function() {
-		var komethod=$scope.komethods[$scope.ko.komethod];
-		$scope.ko.koquantities={};
+	$scope.knockoutcalc = function() {
+		var komethod = $scope.komethods[$scope.ko.komethod];
+		$scope.ko.koquantities = {};
 
-		$scope.ko.searchkomethod=$scope.ko.komethod; //Ensure the searchname is kept up to date
+		$scope.ko.searchkomethod = $scope.ko.komethod; //Ensure the searchname is kept up to date
 
 		for (hitbox in $scope.creatures[$scope.creature.name].hitboxes) {
-			var torpor=komethod.torpor*$scope.creatures[$scope.creature.name].hitboxes[hitbox];
-			var damage=komethod.damage*$scope.creatures[$scope.creature.name].hitboxes[hitbox];
+			var torpor = komethod.torpor*$scope.creatures[$scope.creature.name].hitboxes[hitbox];
+			var damage = komethod.damage*$scope.creatures[$scope.creature.name].hitboxes[hitbox];
 			if (komethod.usesmeleedam) {
-				torpor*=$scope.ko.komeleedam/100;
-				damage*=$scope.ko.komeleedam/100;
+				torpor*= $scope.ko.komeleedam/100;
+				damage*= $scope.ko.komeleedam/100;
 			}
 			if (komethod.usesweapondam) {
-				torpor*=$scope.ko.koweapondam/100;
-				damage*=$scope.ko.koweapondam/100;
+				torpor*= $scope.ko.koweapondam/100;
+				damage*= $scope.ko.koweapondam/100;
 			}
-			for (i=0; i<komethod.damagetypes.length; i++) {
+			for (i = 0; i<komethod.damagetypes.length; i++) {
 				if (komethod.damagetypes[i] in $scope.creatures[$scope.creature.name].damagemultipliers) {
-					torpor*=$scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
-					damage*=$scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
+					torpor*= $scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
+					damage*= $scope.creatures[$scope.creature.name].damagemultipliers[komethod.damagetypes[i]];
 				}
 			}
-			$scope.ko.kotorpor[hitbox]=torpor;
-			$scope.ko.kodamage[hitbox]=damage;
-			$scope.ko.koquantities[hitbox]=Math.ceil($scope.creature.torpor/torpor);
-			$scope.ko.kotimes[hitbox]=$scope.ko.koquantities[hitbox]*komethod.time;
+			$scope.ko.kotorpor[hitbox] = torpor;
+			$scope.ko.kodamage[hitbox] = damage;
+			$scope.ko.koquantities[hitbox] = Math.ceil($scope.creature.torpor/torpor);
+			$scope.ko.kotimes[hitbox] = $scope.ko.koquantities[hitbox]*komethod.time;
 		}
 
 		var now = new Date();
 		$cookies.putObject('ko', $scope.ko, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate()), path: '/taming'});
 
 		/*for (hitbox in $scope.creatures[$scope.creature.name].hitboxes) {
-			$scope.ko.koquantities[hitbox]=Math.ceil($scope.creature.torpor/$scope.komethodtorpor[$scope.ko.komethod]/$scope.creatures[$scope.creature.name].projectiledamage/$scope.ko.kodamagemultiplier/$scope.creatures[$scope.creature.name].hitboxes[hitbox]);
-			$scope.ko.kotimes[hitbox]=$scope.ko.koquantities[hitbox]*5;
+			$scope.ko.koquantities[hitbox] = Math.ceil($scope.creature.torpor/$scope.komethodtorpor[$scope.ko.komethod]/$scope.creatures[$scope.creature.name].projectiledamage/$scope.ko.kodamagemultiplier/$scope.creatures[$scope.creature.name].hitboxes[hitbox]);
+			$scope.ko.kotimes[hitbox] = $scope.ko.koquantities[hitbox]*5;
 		}*/
 		/*if ($scope.creatures[$scope.creature.name].projectiledamage>1 && "Head" in $scope.creatures[$scope.creature.name].hitboxes) {
-			var headshots=$scope.ko.koquantities["Head"]-1;
-			var bodyshots=$scope.ko.koquantities["Body"]-(headshots*$scope.creatures[$scope.creature.name].hitboxes["Head"]);
-			$scope.ko.koquantities["Head+Body"]=headshots+"+"+bodyshots;
-			$scope.ko.kotimes["Head+Body"]=(headshots+bodyshots)*5;
+			var headshots = $scope.ko.koquantities["Head"]-1;
+			var bodyshots = $scope.ko.koquantities["Body"]-(headshots*$scope.creatures[$scope.creature.name].hitboxes["Head"]);
+			$scope.ko.koquantities["Head+Body"] = headshots+"+"+bodyshots;
+			$scope.ko.kotimes["Head+Body"] = (headshots+bodyshots)*5;
 		}*/
 	}
 
@@ -2032,6 +2034,6 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.maxfoodcalc();
 	$scope.alltimescalc();
 	$scope.foodcalc();
-	$rootScope.pagetitle="ARK Taming Calculator";
+	$rootScope.pagetitle = "ARK Taming Calculator";
 
 }]);
