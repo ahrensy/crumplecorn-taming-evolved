@@ -1,7 +1,26 @@
-var tamingController=angular.module('tamingControllers', []).controller('tamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
+angular.module('TamingModule', []).controller('TamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
 
 	$scope.foods={
-
+		'Kibble-Generic': {
+			food: 79.98,
+			affinity: 400
+		},
+		'Kibble-Bronto': {
+			food: 53.28,
+			affinity: 400
+		},
+		'Kibble-Gigantopithecus': {
+			food: 79.98,
+			affinity: 300
+		},
+		'Kibble-Mosasaurus': {
+			food: 79.98,
+			affinity: 550
+		},
+		'Kibble-Diplodocus': {
+			food: 53.28,
+			affinity: 275
+		},
 		'Mejoberry': {
 			food: 30,
 			affinity: 30
@@ -65,26 +84,6 @@ var tamingController=angular.module('tamingControllers', []).controller('tamingC
 		'Cooked Prime Fish': {
 			food: 25,
 			affinity: 30
-		},
-		'Kibble-Generic': {
-			food: 79.98,
-			affinity: 400
-		},
-		'Kibble-Bronto': {
-			food: 53.28,
-			affinity: 400
-		},
-		'Kibble-Gigantopithecus': {
-			food: 79.98,
-			affinity: 300
-		},
-		'Kibble-Mosasaurus': {
-			food: 79.98,
-			affinity: 550
-		},
-		'Kibble-Diplodocus': {
-			food: 53.28,
-			affinity: 275
 		},
 		'Crop': {
 			food: 40,
@@ -1547,7 +1546,7 @@ var tamingController=angular.module('tamingControllers', []).controller('tamingC
 			version: "20160131",
 			searchname: "Ankylosaurus",
 			name: "Ankylosaurus",
-			level: 20,
+			level: 150,
 			tamingmethod: "Standard",
 			tamingmultiplier: 1,
 			foodratemultiplier: 1,
