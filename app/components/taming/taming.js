@@ -187,6 +187,10 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		'Rare Flower': {
 			food: 15*2.3333,
 			affinity: 200
+		},
+		'Sweet Vegetable Cake': {
+			food: 180,
+			affinity: 450.0
 		}
 	}
 
@@ -415,16 +419,77 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 	}
 
+  /*  [Creature]_Character_BP   -   filter by 'aff'
+  **    Required Tame Affinity                          the base level of affinity required for a creature of this type at level 0
+  **    Required Tame Affinity Per Base Level           the affinity gain per level of the creature
+  **    Tame Ineffectiveness By Affinity                Used in Taming Effectiveness
+
+                                -   filter by 'damage'
+        Bone Damage Multipliers
+
+      DinoCharacterStatusComponent_BP_[Creature]    -   filter by 'food'
+        Base Food Consumption Rate                      the creature's food consumption rate
+        Prone Water Food Consumption Multiplier         a multiplier which is applied when the dino is unconcious and being tamed
+
+                                                    -   filter by 'torp'
+        Torpidity                                       the base torpor of the creature at level 1
+        Recovery Rate Status Value                      part of the torpor reduction rate
+        Knocked Out Torpidity Recovery Rate Multiplier  a multiplier for the torpor reduction rate when the creature is knocked out
+        The Max Torpor Increase Per base Level          percentage of the creature's base torpor it gains per level after level 1
+      
+      DinoSettings_[Type]_[Size]_[Creature]   -   
+        Food Effectiveness Multipliers                  Drill down
+        Extra Food Effectiveness Multipliers
+
+        The type of food can be found in "Food Item Parent", 
+          and the value we are interested in is the "Affinity Override", which is the amount of affinity gain when this type of food is eaten
+        
+                                              -   filter by 'damage'
+        Melee_Torpidity_StoneWeapon (club)
+        Melee_Human (fists)
+        Melee_Dino_Herbivore (Pachy)
+  */
+
 	$scope.creatures = {
+
+		Achatina: {
+			requiredTameAffinity: 4000.0,
+			requiredTameAffinityPerBaseLevel: 150.0,
+			tameIneffectivenessByAffinity: 0.2,
+      baseFoodConsumptionRate: -0.001736,
+      proneWaterFoodConsumptionMultiplier: 864.055298,
+			get foodrate () {
+        return this.baseFoodConsumptionRate * this.proneWaterFoodConsumptionMultiplier;
+      },
+			baseTorpidity: 50.0,
+      recoveryRateStatusValue: -0.1,
+      knockedOutTorpidityRecoveryRateMultiplier: 3.0,
+			get baseTorporRecoveryRate () {
+        return this.recoveryRateStatusValue * this.knockedOutTorpidityRecoveryRateMultiplier;
+      },
+			torporPerLevel: 0.06,
+			basefood: 'Sweet Vegetable Cake',
+			foods: ['Sweet Vegetable Cake'],
+			tamingmethods: ['Standard'],
+			damagemultipliers: {
+				"DmgType_Melee_HighTorpidity_StoneWeapon": 0.66,
+				"DmgType_Melee_Human": 0.8
+			},
+			hitboxes: {
+				"Neck": 1.0,
+				"Tail": 0.5,
+				"Shell": 0.1
+			}
+		},
 
 		Allosaurus: {
 			foodrate: -0.001852*180.063385,
-			basetorpor: 1000.0,
-			basetorporrate: -0.1*8.0,
-			torporperlevel: 0.06,
-			baseaffinity: 2400.0,
-			affinityperlevel: 100,
-			ineffectbyaff: 1.875,
+			baseTorpidity: 1000.0,
+			baseTorporRecoveryRate: -0.1*8.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2400.0,
+			requiredTameAffinityPerBaseLevel: 100,
+			tameIneffectivenessByAffinity: 1.875,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Diplo',
@@ -441,12 +506,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Anglerfish: {
 			foodrate: -0.001852*149.988007,
-			basetorpor: 900,
-			basetorporrate: -7.0*0.4,
-			torporperlevel: 0.06,
-			baseaffinity: 1800.0,
-			affinityperlevel: 90,
-			ineffectbyaff: 2.5,
+			baseTorpidity: 900,
+			baseTorporRecoveryRate: -7.0*0.4,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1800.0,
+			requiredTameAffinityPerBaseLevel: 90,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Kairuku',
@@ -463,12 +528,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Ankylosaurus: {
 			foodrate: -0.003156*176.03154,
-			basetorpor: 420,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 3000,
-			affinityperlevel: 150,
-			ineffectbyaff: 0.2,
+			baseTorpidity: 420,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3000,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 0.2,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Dilo',
@@ -484,9 +549,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Araneo: {
 			foodrate: -0.001736*864.055298,
-			baseaffinity: 4000,
-			affinityperlevel: 120,
-			ineffectbyaff: 4.166667,
+			requiredTameAffinity: 4000,
+			requiredTameAffinityPerBaseLevel: 120,
+			tameIneffectivenessByAffinity: 4.166667,
 			basefood: 'Spoiled Meat',
 			foods: ['Spoiled Meat'],
 			tamingmethods: ['Non-Violent'],
@@ -496,12 +561,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Argentavis: {
 			foodrate: -0.001852*199.983994,
-			basetorpor: 600,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 2000,
-			affinityperlevel: 100,
-			ineffectbyaff: 1.875,
+			baseTorpidity: 600,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2000,
+			requiredTameAffinityPerBaseLevel: 100,
+			tameIneffectivenessByAffinity: 1.875,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Stego',
@@ -520,9 +585,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Arthropluera: {
 			foodrate: -0.001543*648.088135,
-			baseaffinity: 3000.0,
-			affinityperlevel: 75.0,
-			ineffectbyaff: 2.5,
+			requiredTameAffinity: 3000.0,
+			requiredTameAffinityPerBaseLevel: 75.0,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Spoiled Meat',
 			foods: ['Broth of Enlightenment', 'Spoiled Meat', 'Raw Meat'],
 			tamingmethods: ['Non-Violent'],
@@ -532,12 +597,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Beelzebufo: {
 			foodrate: -0.001929*648.00415,
-			basetorpor: 200,
-			basetorporrate: -0.1*6.666,
-			torporperlevel: 0.06,
-			baseaffinity: 1800.000,
-			affinityperlevel: 75,
-			ineffectbyaff: 0.4,
+			baseTorpidity: 200,
+			baseTorporRecoveryRate: -0.1*6.666,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1800.000,
+			requiredTameAffinityPerBaseLevel: 75,
+			tameIneffectivenessByAffinity: 0.4,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Scorp',
@@ -554,12 +619,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Brontosaurus: {
 			foodrate: -0.007716*180.001144,
-			basetorpor: 1900,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 10000,
-			affinityperlevel: 500,
-			ineffectbyaff: 0.06,
+			baseTorpidity: 1900,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 10000,
+			requiredTameAffinityPerBaseLevel: 500,
+			tameIneffectivenessByAffinity: 0.06,
 			basefood: 'Mejoberry',
 			foods: ['Kibble-Bronto'].concat(Herbivore_Foods_No_Kibble),
 			kibble: 'Turtle',
@@ -575,12 +640,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Carbonemys: {
 			foodrate: -0.003156*352.06308,
-			basetorpor: 275,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 3000,
-			affinityperlevel: 150,
-			ineffectbyaff: 0.2,
+			baseTorpidity: 275,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3000,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 0.2,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Ptera',
@@ -598,12 +663,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Carnotaurus: {
 			foodrate: -0.001852*199.983944,
-			basetorpor: 350,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 2000,
-			affinityperlevel: 100,
-			ineffectbyaff: 1.875,
+			baseTorpidity: 350,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2000,
+			requiredTameAffinityPerBaseLevel: 100,
+			tameIneffectivenessByAffinity: 1.875,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Ankylo',
@@ -620,12 +685,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Castoroides: {
 			foodrate: -0.002314*160.056335,
-			basetorpor: 350,
-			basetorporrate: -0.1*15.0,
-			torporperlevel: 0.06,
-			baseaffinity: 2000,
-			affinityperlevel: 100,
-			ineffectbyaff: 0.3,
+			baseTorpidity: 350,
+			baseTorporRecoveryRate: -0.1*15.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2000,
+			requiredTameAffinityPerBaseLevel: 100,
+			tameIneffectivenessByAffinity: 0.3,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Galli',
@@ -641,12 +706,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Compsognathus: {
 			foodrate: -0.000868*1728.110596,
-			basetorpor: 25,
-			basetorporrate: -0.1*13.0,
-			torporperlevel: 0.06,
-			baseaffinity: 500.0,
-			affinityperlevel: 65.0,
-			ineffectbyaff: 8.333333,
+			baseTorpidity: 25,
+			baseTorporRecoveryRate: -0.1*13.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 500.0,
+			requiredTameAffinityPerBaseLevel: 65.0,
+			tameIneffectivenessByAffinity: 8.333333,
 			basefood: 'Prime Meat-Compy',
 			foods: ['Raw Mutton-Compy', 'Prime Meat-Compy', 'Raw Prime Fish-Compy'],
 			tamingmethods: ['Standard'],
@@ -662,12 +727,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Dilophosaurus: {
 			foodrate: -0.000868*1728.110596,
-			basetorpor: 75,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 450,
-			affinityperlevel: 22.5,
-			ineffectbyaff: 8.333333,
+			baseTorpidity: 75,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 450,
+			requiredTameAffinityPerBaseLevel: 22.5,
+			tameIneffectivenessByAffinity: 8.333333,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
@@ -684,12 +749,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Dimetrodon: {
 			foodrate: -0.001736*160.010239,
-			basetorpor: 750.0,
-			basetorporrate: -10.0*2.5,
-			torporperlevel: 0.06,
-			baseaffinity: 1500.0,
-			affinityperlevel: 90.0,
-			ineffectbyaff: 2.5,
+			baseTorpidity: 750.0,
+			baseTorporRecoveryRate: -10.0*2.5,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1500.0,
+			requiredTameAffinityPerBaseLevel: 90.0,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Quetzal',
@@ -706,12 +771,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Dimorphodon: {
 			foodrate: -0.001302*1152.07373,
-			basetorpor: 100,
-			basetorporrate: -0.1*8.333,
-			torporperlevel: 0.06,
-			baseaffinity: 900,
-			affinityperlevel: 45,
-			ineffectbyaff: 4.166666,
+			baseTorpidity: 100,
+			baseTorporRecoveryRate: -0.1*8.333,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 900,
+			requiredTameAffinityPerBaseLevel: 45,
+			tameIneffectivenessByAffinity: 4.166666,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
@@ -728,12 +793,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Diplodocus: {
 			foodrate: -0.007716*180.001144,
-			basetorpor: 3000.0,
-			basetorporrate: -1*0.75,
-			torporperlevel: 0.06,
-			baseaffinity: 7500.0,
-			affinityperlevel: 375.0,
-			ineffectbyaff: 0.08,
+			baseTorpidity: 3000.0,
+			baseTorporRecoveryRate: -1*0.75,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 7500.0,
+			requiredTameAffinityPerBaseLevel: 375.0,
+			tameIneffectivenessByAffinity: 0.08,
 			basefood: 'Mejoberry',
 			foods: ['Kibble-Diplodocus'].concat(Herbivore_Foods_No_Kibble),
 			kibble: 'Lystrosaurus',
@@ -751,12 +816,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		"Direbear": {
 			foodrate: -0.003156*150.0,
-			basetorpor: 1000,
-			basetorporrate: -0.1*9.0,
-			torporperlevel: 0.06,
-			baseaffinity: 4000,
-			affinityperlevel: 125,
-			ineffectbyaff: 1.25,
+			baseTorpidity: 1000,
+			baseTorporRecoveryRate: -0.1*9.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 4000,
+			requiredTameAffinityPerBaseLevel: 125,
+			tameIneffectivenessByAffinity: 1.25,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default.concat(['Mejoberry', 'Other Berry']),
 			kibble: 'Carno',
@@ -773,12 +838,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		"Direwolf": {
 			foodrate: -0.444444462455,
-			basetorpor: 450,
-			basetorporrate: -0.1*5.0,
-			torporperlevel: 0.06,
-			baseaffinity: 1200,
-			affinityperlevel: 60,
-			ineffectbyaff: 3.125,
+			baseTorpidity: 450,
+			baseTorporRecoveryRate: -0.1*5.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200,
+			requiredTameAffinityPerBaseLevel: 60,
+			tameIneffectivenessByAffinity: 3.125,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Carno',
@@ -796,12 +861,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Dodo: {
 			foodrate: -0.000868*2880.184326,
-			basetorpor: 30,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 450,
-			affinityperlevel: 22.5,
-			ineffectbyaff: 1.333333,
+			baseTorpidity: 30,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 450,
+			requiredTameAffinityPerBaseLevel: 22.5,
+			tameIneffectivenessByAffinity: 1.333333,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
@@ -817,12 +882,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Doedicurus: {
 			foodrate: -0.003156*176.03154,
-			basetorpor: 800,
-			basetorporrate: -0.1*7.5,
-			torporperlevel: 0.06,
-			baseaffinity: 4000,
-			affinityperlevel: 150,
-			ineffectbyaff: 0.2,
+			baseTorpidity: 800,
+			baseTorporRecoveryRate: -0.1*7.5,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 4000,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 0.2,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Dilo',
@@ -838,9 +903,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		"Dung Beetle": {
 			foodrate: -0.001488*336.021515,
-			baseaffinity: 900.0,
-			affinityperlevel: 50.0,
-			ineffectbyaff: 4.166667,
+			requiredTameAffinity: 900.0,
+			requiredTameAffinityPerBaseLevel: 50.0,
+			tameIneffectivenessByAffinity: 4.166667,
 			basefood: 'Raw Meat',
 			foods: ['Large Feces', 'Medium Feces', 'Small Feces', 'Human Feces', 'Spoiled Meat', 'Raw Meat'],
 			tamingmethods: ['Non-Violent'],
@@ -850,12 +915,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Dunkleosteus: {
 			foodrate: -0.001852*199.983994,
-			basetorpor: 1150.0,
-			basetorporrate: -2.0*0.5,
-			torporperlevel: 0.06,
-			baseaffinity: 1300.0,
-			affinityperlevel: 60.0,
-			ineffectbyaff: 3.275,
+			baseTorpidity: 1150.0,
+			baseTorporRecoveryRate: -2.0*0.5,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1300.0,
+			requiredTameAffinityPerBaseLevel: 60.0,
+			tameIneffectivenessByAffinity: 3.275,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Titanoboa',
@@ -873,12 +938,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Gallimimus: {
 			foodrate: -0.001929*432.002777,
-			basetorpor: 420.0,
-			basetorporrate: -1.67*2.5,
-			torporperlevel: 0.06,
-			baseaffinity: 2200.0,
-			affinityperlevel: 95.0,
-			ineffectbyaff: 0.4,
+			baseTorpidity: 420.0,
+			baseTorporRecoveryRate: -1.67*2.5,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2200.0,
+			requiredTameAffinityPerBaseLevel: 95.0,
+			tameIneffectivenessByAffinity: 0.4,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Dimetro',
@@ -895,12 +960,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Giganotosaurus: {
 			foodrate: -0.002314*160.056335,
-			basetorpor: 10000,
-			basetorporrate: -25.0*4.8,
-			torporperlevel: 0.06,
-			baseaffinity: 5000,
-			affinityperlevel: 160,
-			ineffectbyaff: 1.25,
+			baseTorpidity: 10000,
+			baseTorporRecoveryRate: -25.0*4.8,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 5000,
+			requiredTameAffinityPerBaseLevel: 160,
+			tameIneffectivenessByAffinity: 1.25,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Quetzal',
@@ -917,9 +982,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Gigantopithecus: {
 			foodrate: -0.004156*176.03154,
-			baseaffinity: 4600.0,
-			affinityperlevel: 75,
-			ineffectbyaff: 2.5,
+			requiredTameAffinity: 4600.0,
+			requiredTameAffinityPerBaseLevel: 75,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Mejoberry',
 			foods: ['Kibble-Gigantopithecus', 'Mejoberry', 'Other Berry'],
 			kibble: 'Titanoboa',
@@ -930,9 +995,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Ichthyosaurus: {
 			foodrate: -0.001929*420.0,
-			baseaffinity: 1500,
-			affinityperlevel: 75,
-			ineffectbyaff: 2.5,
+			requiredTameAffinity: 1500,
+			requiredTameAffinityPerBaseLevel: 75,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Dodo',
@@ -943,12 +1008,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Kairuku: {
 			foodrate: -0.001389*1079.913574,
-			basetorpor: 300,
-			basetorporrate: -0.1*10.0,
-			torporperlevel: 0.06,
-			baseaffinity: 900,
-			affinityperlevel: 45,
-			ineffectbyaff: 4.166667,
+			baseTorpidity: 300,
+			baseTorporRecoveryRate: -0.1*10.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 900,
+			requiredTameAffinityPerBaseLevel: 45,
+			tameIneffectivenessByAffinity: 4.166667,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
@@ -965,9 +1030,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Lystrosaurus: {
 			foodrate: -0.000868*2880.184326,
-			baseaffinity: 2000.0,
-			affinityperlevel: 22.5,
-			ineffectbyaff: 1.333333,
+			requiredTameAffinity: 2000.0,
+			requiredTameAffinityPerBaseLevel: 22.5,
+			tameIneffectivenessByAffinity: 1.333333,
 			basefood: 'Mejoberry',
 			foods: ['Rare Flower', 'Mejoberry', 'Other Berry'],
 			tamingmethods: ['Non-Violent'],
@@ -977,12 +1042,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Mammoth: {
 			foodrate: -0.004133*192.027771,
-			basetorpor: 550,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 5000,
-			affinityperlevel: 250,
-			ineffectbyaff: 0.12,
+			baseTorpidity: 550,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 5000,
+			requiredTameAffinityPerBaseLevel: 250,
+			tameIneffectivenessByAffinity: 0.12,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Raptor',
@@ -998,9 +1063,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Manta: {
 			foodrate: -0.001929*420.0,
-			baseaffinity: 1500.0,
-			affinityperlevel: 75.0,
-			ineffectbyaff: 2.5,
+			requiredTameAffinity: 1500.0,
+			requiredTameAffinityPerBaseLevel: 75.0,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Angler Gel',
 			foods: ['Angler Gel'],
 			tamingmethods: ['Non-Violent'],
@@ -1010,12 +1075,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Megaloceros: {
 			foodrate: -0.001543*432.058746,
-			basetorpor: 175,
-			basetorporrate: -0.1*2.915,
-			torporperlevel: 0.06,
-			baseaffinity: 1200,
-			affinityperlevel: 60,
-			ineffectbyaff: 0.5,
+			baseTorpidity: 175,
+			baseTorporRecoveryRate: -0.1*2.915,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200,
+			requiredTameAffinityPerBaseLevel: 60,
+			tameIneffectivenessByAffinity: 0.5,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Dimorph',
@@ -1032,12 +1097,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Megalodon: {
 			foodrate: -0.001852*199.983994,
-			basetorpor: 800,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 2000,
-			affinityperlevel: 100,
-			ineffectbyaff: 1.875,
+			baseTorpidity: 800,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2000,
+			requiredTameAffinityPerBaseLevel: 100,
+			tameIneffectivenessByAffinity: 1.875,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Spino',
@@ -1054,9 +1119,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Mesopithicus: {
 			foodrate: -0.000868*2880.184326,
-			baseaffinity: 2200,
-			affinityperlevel: 65,
-			ineffectbyaff: 2.5,
+			requiredTameAffinity: 2200,
+			requiredTameAffinityPerBaseLevel: 65,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Mejoberry',
 			foods: ['Kibble-Generic', 'Mejoberry', 'Other Berry'],
 			kibble: 'Dodo',
@@ -1067,12 +1132,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Mosasaurus: {
 			foodrate: -0.005*180.001144,
-			basetorpor: 3000,
-			basetorporrate: -0.4*32.0,
-			torporperlevel: 0.06,
-			baseaffinity: 11000,
-			affinityperlevel: 600,
-			ineffectbyaff: 0.06,
+			baseTorpidity: 3000,
+			baseTorporRecoveryRate: -0.4*32.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 11000,
+			requiredTameAffinityPerBaseLevel: 600,
+			tameIneffectivenessByAffinity: 0.06,
 			basefood: 'Raw Meat',
 			foods: ['Kibble-Mosasaurus'].concat(Carnivore_Foods_No_Kibble),
 			kibble: 'Quetzal',
@@ -1089,9 +1154,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Onyc: {
 			foodrate: -0.002893*192.034409,
-			baseaffinity: 3000,
-			affinityperlevel: 90,
-			ineffectbyaff: 2.5,
+			requiredTameAffinity: 3000,
+			requiredTameAffinityPerBaseLevel: 90,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_No_Kibble,
 			tamingmethods: ['Non-Violent'],
@@ -1101,12 +1166,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Oviraptor: {
 			foodrate: -0.001302*768.049133,
-			basetorpor: 125.0,
-			basetorporrate: -0.1*2.08,
-			torporperlevel: 0.06,
-			baseaffinity: 960.0,
-			affinityperlevel: 42.0,
-			ineffectbyaff: 16.666668,
+			baseTorpidity: 125.0,
+			baseTorporRecoveryRate: -0.1*2.08,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 960.0,
+			requiredTameAffinityPerBaseLevel: 42.0,
+			tameIneffectivenessByAffinity: 16.666668,
 			basefood: 'Dodo Egg',
 			foods: ['Giga Egg', 'Quetz Egg', 'Rex Egg', 'Spino Egg', 'Bronto Egg', 'Carno Egg', 'Dodo Egg'],
 			tamingmethods: ['Standard'],
@@ -1123,12 +1188,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Pachycephalosaurus: {
 			foodrate: -0.001543*648.088135,
-			basetorpor: 160.0,
-			basetorporrate: -0.1*2.666,
-			torporperlevel: 0.06,
-			baseaffinity: 1200.0,
-			affinityperlevel: 60.0,
-			ineffectbyaff: 0.5,
+			baseTorpidity: 160.0,
+			baseTorporRecoveryRate: -0.1*2.666,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200.0,
+			requiredTameAffinityPerBaseLevel: 60.0,
+			tameIneffectivenessByAffinity: 0.5,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Dilo',
@@ -1145,12 +1210,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Paraceratherium: {
 			foodrate: -0.0035*327.6474,
-			basetorpor: 1300.0,
-			basetorporrate: -0.1*9.025,
-			torporperlevel: 0.06,
-			baseaffinity: 6500.0,
-			affinityperlevel: 325.0,
-			ineffectbyaff: 0.0923,
+			baseTorpidity: 1300.0,
+			baseTorporRecoveryRate: -0.1*9.025,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 6500.0,
+			requiredTameAffinityPerBaseLevel: 325.0,
+			tameIneffectivenessByAffinity: 0.0923,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Pachy',
@@ -1166,12 +1231,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Parasaurolophus: {
 			foodrate: -0.001929*864.005554,
-			basetorpor: 150,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 1500,
-			affinityperlevel: 75,
-			ineffectbyaff: 0.4,
+			baseTorpidity: 150,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1500,
+			requiredTameAffinityPerBaseLevel: 75,
+			tameIneffectivenessByAffinity: 0.4,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
@@ -1187,12 +1252,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Pelagornis: {
 			foodrate: -0.001543*216.029373,
-			basetorpor: 120.0,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 1200.0,
-			affinityperlevel: 60.0,
-			ineffectbyaff: 3.125,
+			baseTorpidity: 120.0,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200.0,
+			requiredTameAffinityPerBaseLevel: 60.0,
+			tameIneffectivenessByAffinity: 3.125,
 			basefood: 'Raw Fish',
 			foods: ['Kibble-Generic', 'Raw Prime Fish', 'Raw Fish'],
 			kibble: 'Compy',
@@ -1210,12 +1275,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Phiomia: {
 			foodrate: -0.003156*1584.283936,
-			basetorpor: 240,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 3000,
-			affinityperlevel: 150,
-			ineffectbyaff: 0.2,
+			baseTorpidity: 240,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3000,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 0.2,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_No_Kibble,
 			tamingmethods: ['Standard'],
@@ -1231,12 +1296,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Plesiosaurus: {
 			foodrate: -0.003858*180.001144,
-			basetorpor: 1600,
-			basetorporrate: -0.1*21.333332,
-			torporperlevel: 0.06,
-			baseaffinity: 5000,
-			affinityperlevel: 250,
-			ineffectbyaff: 0.75,
+			baseTorpidity: 1600,
+			baseTorporRecoveryRate: -0.1*21.333332,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 5000,
+			requiredTameAffinityPerBaseLevel: 250,
+			tameIneffectivenessByAffinity: 0.75,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Rex',
@@ -1253,12 +1318,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Procoptodon: {
 			foodrate: -0.001929*648.00415,
-			basetorpor: 350.0,
-			basetorporrate: -0.1*6.666,
-			torporperlevel: 0.034285714,
-			baseaffinity: 3000.0,
-			affinityperlevel: 150.0,
-			ineffectbyaff: 0.2,
+			baseTorpidity: 350.0,
+			baseTorporRecoveryRate: -0.1*6.666,
+			torporPerLevel: 0.034285714,
+			requiredTameAffinity: 3000.0,
+			requiredTameAffinityPerBaseLevel: 150.0,
+			tameIneffectivenessByAffinity: 0.2,
 			basefood: 'Rare Mushroom',
 			foods: ['Rare Mushroom', 'Plant Species X Seed'],
 			tamingmethods: ['Standard'],
@@ -1273,12 +1338,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Pteranodon: {
 			foodrate: -0.001543*216.029373,
-			basetorpor: 120,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 1200,
-			affinityperlevel: 60,
-			ineffectbyaff: 3.125,
+			baseTorpidity: 120,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200,
+			requiredTameAffinityPerBaseLevel: 60,
+			tameIneffectivenessByAffinity: 3.125,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Dodo',
@@ -1297,12 +1362,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Pulmonoscorpius: {
 			foodrate: -0.001929*432.002777,
-			basetorpor: 150,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 1500,
-			affinityperlevel: 75,
-			ineffectbyaff: 6.15, //2.5 in devkit
+			baseTorpidity: 150,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1500,
+			requiredTameAffinityPerBaseLevel: 75,
+			tameIneffectivenessByAffinity: 6.15, //2.5 in devkit
 			basefood: 'Spoiled Meat',
 			foods: ['Spoiled Meat'],
 			tamingmethods: ['Standard'],
@@ -1317,12 +1382,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Quetzalcoatlus: {
 			foodrate: -0.0035*140.0,
-			basetorpor: 1850.0,
-			basetorporrate: -0.2*17,
-			torporperlevel: 0.06,
-			baseaffinity: 6850,
-			affinityperlevel: 300,
-			ineffectbyaff: 0.9375,
+			baseTorpidity: 1850.0,
+			baseTorporRecoveryRate: -0.2*17,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 6850,
+			requiredTameAffinityPerBaseLevel: 300,
+			tameIneffectivenessByAffinity: 0.9375,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Rex',
@@ -1341,12 +1406,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Raptor: {
 			foodrate: -0.001543*648.088135,
-			basetorpor: 180,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 1200,
-			affinityperlevel: 60,
-			ineffectbyaff: 3.125,
+			baseTorpidity: 180,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200,
+			requiredTameAffinityPerBaseLevel: 60,
+			tameIneffectivenessByAffinity: 3.125,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Parasaur',
@@ -1364,12 +1429,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Rex: {
 			foodrate: -0.002314*180.063385,
-			basetorpor: 1550,
-			basetorporrate: -0.1*7.25,
-			torporperlevel: 0.06,
-			baseaffinity: 3450,
-			affinityperlevel: 150,
-			ineffectbyaff: 1.25,
+			baseTorpidity: 1550,
+			baseTorporRecoveryRate: -0.1*7.25,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3450,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 1.25,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Scorp',
@@ -1386,12 +1451,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Sabertooth: {
 			foodrate: -0.001543*288.039185,
-			basetorpor: 500,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 1200,
-			affinityperlevel: 60,
-			ineffectbyaff: 3.125,
+			baseTorpidity: 500,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1200,
+			requiredTameAffinityPerBaseLevel: 60,
+			tameIneffectivenessByAffinity: 3.125,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Bronto',
@@ -1409,12 +1474,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Sarcosuchus: {
 			foodrate: -0.001578*211.237854,
-			basetorpor: 400,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 2000,
-			affinityperlevel: 75,
-			ineffectbyaff: 2.5,
+			baseTorpidity: 400,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 2000,
+			requiredTameAffinityPerBaseLevel: 75,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Trike',
@@ -1431,12 +1496,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Spinosaurus: {
 			foodrate: -0.002066*150.0,
-			basetorpor: 850,
-			basetorporrate: -0.1*21.333332,
-			torporperlevel: 0.06,
-			baseaffinity: 3200,
-			affinityperlevel: 150,
-			ineffectbyaff: 1.5,
+			baseTorpidity: 850,
+			baseTorporRecoveryRate: -0.1*21.333332,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3200,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 1.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Argent',
@@ -1453,12 +1518,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Stegosaurus: {
 			foodrate: -0.005341*208.034286,
-			basetorpor: 500,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 6000,
-			affinityperlevel: 300,
-			ineffectbyaff: 0.1,
+			baseTorpidity: 500,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 6000,
+			requiredTameAffinityPerBaseLevel: 300,
+			tameIneffectivenessByAffinity: 0.1,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Sarco',
@@ -1475,12 +1540,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		"Terror Bird": {
 			foodrate: -0.001578*352.06308,
-			basetorpor: 300,
-			basetorporrate: -1.5*1.5,
-			torporperlevel: 0.06,
-			baseaffinity: 1600.0,
-			affinityperlevel: 85.0,
-			ineffectbyaff: 2.5,
+			baseTorpidity: 300,
+			baseTorporRecoveryRate: -1.5*1.5,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 1600.0,
+			requiredTameAffinityPerBaseLevel: 85.0,
+			tameIneffectivenessByAffinity: 2.5,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Gallimimus',
@@ -1498,12 +1563,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		Triceratops: {
 			foodrate: -0.003156*352.06308,
-			basetorpor: 250,
-			basetorporrate: -0.1*3,
-			torporperlevel: 0.06,
-			baseaffinity: 3000,
-			affinityperlevel: 150,
-			ineffectbyaff: 0.2,
+			baseTorpidity: 250,
+			baseTorporRecoveryRate: -0.1*3,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3000,
+			requiredTameAffinityPerBaseLevel: 150,
+			tameIneffectivenessByAffinity: 0.2,
 			basefood: 'Mejoberry',
 			foods: Herbivore_Foods_Default,
 			kibble: 'Carno',
@@ -1519,12 +1584,12 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 
 		"Woolly Rhino": {
 			foodrate: -0.003156*150.0,
-			basetorpor: 600.0,
-			basetorporrate: -0.1*9.0,
-			torporperlevel: 0.06,
-			baseaffinity: 3450.0,
-			affinityperlevel: 125.0,
-			ineffectbyaff: 1.25,
+			baseTorpidity: 600.0,
+			baseTorporRecoveryRate: -0.1*9.0,
+			torporPerLevel: 0.06,
+			requiredTameAffinity: 3450.0,
+			requiredTameAffinityPerBaseLevel: 125.0,
+			tameIneffectivenessByAffinity: 1.25,
 			basefood: 'Mejoberry',
 			foods: ['Kibble-Bronto'].concat(Herbivore_Foods_No_Kibble),
 			kibble: 'Terror Bird',
@@ -1752,9 +1817,9 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		}
 
 		creaturedata = $scope.creatures[creature.name];
-		creature.requiredaffinity = creaturedata.baseaffinity+creaturedata.affinityperlevel*creature.level;
-		creature.torpor = creaturedata.basetorpor+creaturedata.basetorpor*creaturedata.torporperlevel*(creature.level-1);
-		creature.torporrate = creaturedata.basetorporrate+Math.pow(creature.level-1,$scope.texponent)/($scope.tcoefficient/creaturedata.basetorporrate);
+		creature.requiredaffinity = creaturedata.requiredTameAffinity+creaturedata.requiredTameAffinityPerBaseLevel*creature.level;
+		creature.torpor = creaturedata.baseTorpidity+creaturedata.baseTorpidity*creaturedata.torporPerLevel*(creature.level-1);
+		creature.torporrate = creaturedata.baseTorporRecoveryRate+Math.pow(creature.level-1,$scope.texponent)/($scope.tcoefficient/creaturedata.baseTorporRecoveryRate);
 		var now = new Date();
 		$cookies.putObject(Cookies_Prefix + 'creature', $scope.creature, {expires: new Date(now.getFullYear(), now.getMonth()+6, now.getDate())});
 		$scope.maxfoodcalc();
@@ -2026,7 +2091,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 				var food = foodprioritylist[i];
 				while (fedfood[food]<foodamounts[food]) {
 					fedfood[food]++;
-					effectiveness -= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/100;
+					effectiveness -= Math.pow(effectiveness, 2)*creaturedata.tameIneffectivenessByAffinity/foods[food].affinity/creature.tamingmultiplier/100;
 				}
 			}
 
@@ -2038,7 +2103,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 				var food = foodprioritylist[i];
 				while (fedfood[food]<foodamounts[food]) {
 					fedfood[food]++;
-					effectiveness -= Math.pow(effectiveness, 2)*creaturedata.ineffectbyaff/foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier/100;
+					effectiveness -= Math.pow(effectiveness, 2)*creaturedata.tameIneffectivenessByAffinity/foods[food].affinity/creature.tamingmultiplier/creaturedata.nonviolentfoodaffinitymultiplier/100;
 				}
 			}
 
