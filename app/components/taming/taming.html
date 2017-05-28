@@ -49,14 +49,14 @@
       </div>
 
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Food']}" ng-click="showhidetable('Food')">Food Details</div>
-      <div class="tableslide" ng-show="tablevisibility['Food']">
-        <div class="form-group">
+      <div class="tableslide">
+        <div class="form-group slide" ng-show="tablevisibility['Food']">
           <label class="col-xs-5 control-label">Food</label>
           <label class="col-xs-3 control-label">Quantity</label>
           <label class="col-xs-1 control-label">Max</label>
           <label class="col-xs-3 control-label align-right">Time</label>
         </div>
-        <div class="form-group" ng-repeat="food in creatures[creature.name].foods" class="repeatslide">
+        <div class="form-group slide" ng-repeat="food in creatures[creature.name].foods" class="repeatslide" ng-show="tablevisibility['Food']">
           <label class="col-xs-5 control-data" ng-class="{'fillfood': creature.fillfood==food}" ng-click="setFillFood(food)">{{food.split("-")[0]}}{{food.split("-")[0]=="Kibble" ? ' ('+creatures[creature.name].kibble+')' : ''}}:</label>
           <div class="col-xs-3">
             <input class="form-control" ng-model="foodamounts[food]" ng-change="foodcalc()" type="number">
@@ -64,48 +64,50 @@
           <label class="col-xs-1 control-data">{{maxfoodamounts[food]}}</label>
           <label class="col-xs-3 control-data align-right">{{times[food] | secondsToDateTime | date: 'HH:mm:ss'}}</label>
         </div>
-      </div>
-      <div class="tablesummary slide" ng-hide="tablevisibility['Food']">
-        <span ng-repeat="food in creatures[creature.name].foods | filter: filterFoods">{{food.split("-")[0]}}{{food.split("-")[0]=="Kibble" ? ' ('+creatures[creature.name].kibble+')' : ''}}: {{foodamounts[food]}}<span ng-show=" ! $last ">, </span></span>
+        <div class="form-group tablesummary slide" ng-repeat="food in creatures[creature.name].foods | filter: filterFoods" class="repeatslide" ng-hide="tablevisibility['Food']">
+          <span>{{food.split("-")[0]}}{{food.split("-")[0]=="Kibble" ? ' ('+creatures[creature.name].kibble+')' : ''}}: {{foodamounts[food]}}</span>
+        </div>
       </div>
 
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Tame']}" ng-click="showhidetable('Tame')" ng-show="creature.tamingmethod=='Standard'">Tame Details</div>
-      <div class="tableslide" ng-show="creature.tamingmethod=='Standard' && tablevisibility['Tame']">
-        <div class="form-group" ng-show="showextratamedetails">
+      <div class="tableslide">
+        <div class="form-group slide" ng-show="showextratamedetails && isShowingTameDetails">
           <label class="col-sm-6 control-label">Affinity:</label>
           <label class="col-sm-6 control-data">{{creature.suppliedaffinity}}/{{creature.requiredaffinity}}</label>
         </div>
-        <div class="form-group" ng-show="showextratamedetails">
+        <div class="form-group slide" ng-show="showextratamedetails && isShowingTameDetails">
           <label class="col-sm-6 control-label">Food Total / Rate:</label>
           <label class="col-sm-6 control-data">{{creature.totalfood}} ({{creature.foodrate | number:1}})</label>
         </div>
-        <div class="form-group">
+        <div class="form-group slide" ng-show="isShowingTameDetails">
           <label class="col-sm-6 control-label">Total Time:</label>
           <label class="col-sm-6 control-data">{{totaltime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
         </div>
-        <div class="form-group">
+        <div class="form-group slide" ng-show="isShowingTameDetails">
           <label class="col-sm-6 control-label">Effectiveness:</label>
           <label class="col-sm-6 control-data">{{creature.effectiveness | number:1}}% (+{{creature.extralevels}} Lvl)</label>
         </div>
-        <div class="form-group" ng-show="showextratamedetails">
+        <div class="form-group slide" ng-show="showextratamedetails && isShowingTameDetails">
           <label class="col-sm-6 control-label">Torpor Total / Rate:</label>
           <label class="col-sm-6 control-data">{{creature.torpor | number:1}} ({{creature.torporrate | number:3}})</label>
         </div>
-        <div class="form-group">
+        <div class="form-group slide" ng-show="isShowingTameDetails">
           <label class="col-sm-6 control-label">Torpor Buffer:</label>
           <label class="col-sm-6 control-data">{{narcotics.buffertime | secondsToDateTime | date: 'HH:mm:ss'}} ({{narcotics.buffernarcotics}})</label>
         </div>
-        <div class="form-group">
+        <div class="form-group slide" ng-show="isShowingTameDetails">
           <label class="col-sm-6 control-label">Narcotics Buffer:</label>
           <label class="col-sm-6 control-data">{{narcotics.narcoticsbuffertime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
         </div>
-        <div class="form-group">
+        <div class="form-group slide" ng-show="isShowingTameDetails">
           <label class="col-sm-6 control-label">{{narcotics.narcoticsmethod}}:</label>
           <label class="col-sm-6 control-data">{{narcotics.min}} - {{narcotics.max}}</label>
         </div>
-      </div>
-      <div class="tablesummary slide" ng-class="{timeractive: starvetiming.time}" ng-show="creature.tamingmethod=='Standard' && !tablevisibility['Tame']">
-        {{(starvetiming.time)?(starvetiming.tametime):(totaltime) | secondsToDateTime | date: 'HH:mm:ss'}}
+        <div class="form-group slide" ng-hide="isShowingTameDetails">
+          <div class="tablesummary slide" ng-class="{timeractive: starveTiming.time}">
+            {{(starveTiming.time)?(starveTiming.tametime):(totaltime) | secondsToDateTime | date: 'HH:mm:ss'}}
+          </div>
+        </div>
       </div>
 
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Tame']}" ng-click="showhidetable('Tame')" ng-show="creature.tamingmethod=='Non-Violent'">Tame Details</div>
@@ -137,10 +139,10 @@
           <label class="col-sm-5 control-label">Current Torpor:</label>
           <div class="col-sm-7 control-wrapper">
             <div class="col-xs-8">
-              <input class="form-control" ng-model="narcoticstiming.currenttorpor" ng-change="narcoticstimingcalc()" integer type="number" step="any">
+              <input class="form-control" ng-model="narcoticsTiming.currenttorpor" ng-change="narcoticstimingcalc()" integer type="number" step="any">
             </div>
             <div class="col-xs-4">
-              <input type="checkbox" class="form-control hidden" id="narcoticstimercb" ng-model="narcoticstiming.time" ng-change="narcoticstimer()">
+              <input type="checkbox" class="form-control hidden" id="narcoticstimercb" ng-model="narcoticsTiming.time" ng-change="narcoticstimer()">
               <label class="form-control control-data" for="narcoticstimercb">Time</label>
             </div>
           </div>
@@ -155,7 +157,7 @@
           <label class="col-sm-5 control-label">Use {{narcotics.narcoticsmethod}}:</label>
           <div class="col-sm-7 control-wrapper">
             <div class="col-xs-8">
-              <input class="form-control" ng-model="narcoticstiming.supplynarcoticamount" type="number">
+              <input class="form-control" ng-model="narcoticsTiming.supplynarcoticamount" ng-change="saveNarcoticsTiming()" type="number">
             </div>
             <div class="col-xs-4">
               <input type="button" class="form-control" ng-click="supplynarcotic();" value="Use">
@@ -164,27 +166,27 @@
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">For Max:</label>
-          <label class="col-sm-7 control-data">{{narcoticstiming.topupnarcotics}}</label>
+          <label class="col-sm-7 control-data">{{narcoticsTiming.topupnarcotics}}</label>
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Buffer:</label>
-          <label class="col-sm-7 control-data" ng-class="{timeractive: narcoticstiming.time, timeralert: narcoticstiming.buffertime/60<narcoticstiming.alarmthreshold && narcoticstiming.time}">{{narcoticstiming.buffertime+narcoticstiming.narcoticsbuffertime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
+          <label class="col-sm-7 control-data" ng-class="{timeractive: narcoticsTiming.time, timeralert: narcoticsTiming.buffertime/60<narcoticsTiming.alarmthreshold && narcoticsTiming.time}">{{narcoticsTiming.buffertime+narcoticsTiming.narcoticsbuffertime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Alarm:</label>
           <div class="col-sm-7 control-wrapper">
             <div class="col-xs-8">
-              <input class="form-control" ng-model="narcoticstiming.alarmthreshold" type="number" step="any">
+              <input class="form-control" ng-model="narcoticsTiming.alarmthreshold" ng-change="saveNarcoticsTiming()" type="number" step="any">
             </div>
             <div class="col-xs-4">
-              <input type="checkbox" class="form-control hidden" id="narcoticsalarmcb" ng-model="narcoticstiming.alarm">
+              <input type="checkbox" class="form-control hidden" id="narcoticsalarmcb" ng-model="narcoticsTiming.alarm" ng-change="saveNarcoticsTiming()">
               <label class="form-control control-data" for="narcoticsalarmcb">Alarm</label>
             </div>
           </div>
         </div>
       </div>
-      <div ng-class="{timeractive: narcoticstiming.time, timeralert: narcoticstiming.buffertime/60<narcoticstiming.alarmthreshold && narcoticstiming.time}" class="tablesummary slide" ng-show="creature.tamingmethod=='Standard' && !tablevisibility['Narcotics']">
-        {{narcoticstiming.buffertime+narcoticstiming.narcoticsbuffertime | secondsToDateTime | date: 'HH:mm:ss'}}
+      <div ng-class="{timeractive: narcoticsTiming.time, timeralert: narcoticsTiming.buffertime/60<narcoticsTiming.alarmthreshold && narcoticsTiming.time}" class="tablesummary slide" ng-show="creature.tamingmethod=='Standard' && !tablevisibility['Narcotics']">
+        {{narcoticsTiming.buffertime+narcoticsTiming.narcoticsbuffertime | secondsToDateTime | date: 'HH:mm:ss'}}
       </div>
 
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Starve']}" ng-click="showhidetable('Starve')" ng-show="creature.tamingmethod=='Standard'">Starve Timing</div>
@@ -192,14 +194,14 @@
         <div class="form-group">
           <label class="col-sm-5 control-label">Maximum Food:</label>
           <div class="col-sm-7">
-            <input class="form-control" ng-model="starvetiming.maxfood" ng-change="starvetimingcalc()" type="number">
+            <input class="form-control" ng-model="starveTiming.maxfood" ng-change="starveTimingcalc()" type="number">
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Current Food:</label>
           <div class="col-sm-7 control-wrapper">
             <div class="col-xs-8">
-              <input class="form-control" ng-model="starvetiming.currentfood" ng-change="starvetimingcalc()" integer type="number" step="any"><input id="starvetimercb" class="hidden" type="checkbox" ng-model="starvetiming.time" ng-change="starvetimer()">
+              <input class="form-control" ng-model="starveTiming.currentfood" ng-change="starveTimingcalc()" integer type="number" step="any"><input id="starvetimercb" class="hidden" type="checkbox" ng-model="starveTiming.time" ng-change="starvetimer()">
             </div>
             <div class="col-xs-4">
               <label class="form-control control-data" for="starvetimercb">Time</label>
@@ -208,21 +210,21 @@
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Target Food:</label>
-          <label class="col-sm-7 control-data">{{starvetiming.maxfood-creature.totalfood}}</label>
+          <label class="col-sm-7 control-data">{{starveTiming.maxfood-creature.totalfood}}</label>
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Tame Time:</label>
-          <label class="col-sm-7 control-data" ng-class="{timeractive: starvetiming.time}">{{starvetiming.tametime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
+          <label class="col-sm-7 control-data" ng-class="{timeractive: starveTiming.time}">{{starveTiming.tametime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Starve Time:</label>
-          <label class="col-sm-7 control-data" ng-class="{timeractive: starvetiming.time, timeralert: starvetiming.starvetime/60<starvetiming.alarmthreshold && starvetiming.time}">{{starvetiming.starvetime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
+          <label class="col-sm-7 control-data" ng-class="{timeractive: starveTiming.time, timeralert: starveTiming.starvetime/60<starveTiming.alarmthreshold && starveTiming.time}">{{starveTiming.starvetime | secondsToDateTime | date: 'HH:mm:ss'}}</label>
         </div>
         <div class="form-group">
           <label class="col-sm-5 control-label">Alarm:</label>
           <div class="col-sm-7 control-wrapper">
             <div class="col-xs-8">
-              <input class="form-control" ng-model="starvetiming.alarmthreshold" type="number" step="any"><input id="starvealarmcb" class="hidden" type="checkbox" ng-model="starvetiming.alarm">
+              <input class="form-control" ng-model="starveTiming.alarmthreshold" ng-change="saveStarveTiming()" type="number" step="any"><input id="starvealarmcb" class="hidden" type="checkbox" ng-model="starveTiming.alarm">
             </div>
             <div class="col-xs-4">
               <label class="form-control control-data" for="starvealarmcb">Alarm</label>
@@ -230,8 +232,8 @@
           </div>
         </div>
       </div>
-      <div ng-class="{timeractive: starvetiming.time, timeralert: starvetiming.starvetime/60<starvetiming.alarmthreshold && starvetiming.time}" class="tablesummary slide" ng-show="creature.tamingmethod=='Standard' && !tablevisibility['Starve']">
-        {{starvetiming.starvetime | secondsToDateTime | date: 'HH:mm:ss'}}
+      <div ng-class="{timeractive: starveTiming.time, timeralert: starveTiming.starvetime/60<starveTiming.alarmthreshold && starveTiming.time}" class="tablesummary slide" ng-show="creature.tamingmethod=='Standard' && !tablevisibility['Starve']">
+        {{starveTiming.starvetime | secondsToDateTime | date: 'HH:mm:ss'}}
       </div>
 
       <div class="tableheader slide" ng-class="{'dimmed': !tablevisibility['Knockout']}" ng-click="showhidetable('Knockout')" ng-show="creature.tamingmethod=='Standard'">Knockout Details</div>

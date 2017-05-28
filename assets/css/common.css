@@ -226,7 +226,8 @@ thead {
   color: lime;
 }
 .timeralert {
-  color: red;
+  color: goldenrod;
+  font-weight: bold;
 }
 .red {
   color: red;
