@@ -224,9 +224,10 @@
           <label class="col-sm-5 control-label">Alarm:</label>
           <div class="col-sm-7 control-wrapper">
             <div class="col-xs-8">
-              <input class="form-control" ng-model="starveTiming.alarmthreshold" ng-change="saveStarveTiming()" type="number" step="any"><input id="starvealarmcb" class="hidden" type="checkbox" ng-model="starveTiming.alarm">
+              <input class="form-control" ng-model="starveTiming.alarmthreshold" ng-change="saveStarveTiming()" type="number" step="any">
             </div>
             <div class="col-xs-4">
+              <input type="checkbox" class="form-control hidden" id="starvealarmcb" ng-model="starveTiming.alarm">
               <label class="form-control control-data" for="starvealarmcb">Alarm</label>
             </div>
           </div>
