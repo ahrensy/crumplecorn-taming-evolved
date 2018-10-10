@@ -2,12 +2,12 @@ angular.module('root', ['ngRoute', 'ui.router', 'TamingModule', 'BreedingModule'
 
 	.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise("/taming");
-		
+
     $stateProvider
     .state('taming', {
       url: '/taming',
 			controller: 'TamingController',
-			templateUrl: 'app/components/taming/taming.html?d=20160821'
+			templateUrl: 'app/components/taming/taming.html?d=20181010'
     })
     .state('breeding', {
       url: "/breeding",
