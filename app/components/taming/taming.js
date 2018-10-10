@@ -66,7 +66,7 @@ angular.module('TamingModule', []).factory('Food', function () {
 angular.module('TamingModule', []).controller('TamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
 
   var Cookies_Prefix = "TamingModule_";
-  var Version = "20170527";
+  var Version = "20181010";
 
   var Audio_Volume = 0.3;
   var Audio_Alarm = new Audio('assets/audio/alarm.mp3');
