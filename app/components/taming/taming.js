@@ -121,11 +121,11 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		},
     'Raw Mutton': {
       food: 50,
-      affinity: 375
+      affinity: 187.5
     },
     'Cooked Lamb Chop': {
-      food: 35,
-      affinity: 200
+      food: 50,
+      affinity: 100
     },
 		'Raw Prime Meat': {
 			food: 50,
