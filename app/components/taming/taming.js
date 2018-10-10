@@ -1,8 +1,73 @@
+angular.module('TamingModule', []).factory('Food', function () {
+
+  /**
+   * Constructor, with class name
+   */
+  function Food(name, food, affinity) {
+    // Public properties, assigned to the instance ('this')
+    this.name = name;
+    this.food = food;
+		this.affinity = affinity;
+  }
+
+  /**
+   * Public method, assigned to prototype
+
+  User.prototype.getFullName = function () {
+    return this.firstName + ' ' + this.lastName;
+  };
+	*/
+
+  /**
+   * Private property
+
+  var possibleRoles = ['admin', 'editor', 'guest'];
+ 	*/
+
+  /**
+   * Private function
+
+  function checkRole(role) {
+    return possibleRoles.indexOf(role) !== -1;
+  }
+	*/
+
+  /**
+   * Static property
+   * Using copy to prevent modifications to private property
+
+  User.possibleRoles = angular.copy(possibleRoles);
+	*/
+
+  /**
+   * Static method, assigned to class
+   * Instance ('this') is not available in static context
+
+  User.build = function (data) {
+    if (!checkRole(data.role)) {
+      return;
+    }
+    return new User(
+      data.first_name,
+      data.last_name,
+      data.role,
+      Organisation.build(data.organisation) // another model
+    );
+  };
+	*/
+
+  /**
+   * Return the constructor function
+   */
+  return Food;
+})
+
+
 angular.module('TamingModule', []).controller('TamingController', ['$scope', '$rootScope', '$interval', '$cookies', '$animate', function($scope, $rootScope, $interval, $cookies, $animate) {
 
   var Cookies_Prefix = "TamingModule_";
   var Version = "20170527";
-  
+
   var Audio_Volume = 0.3;
   var Audio_Alarm = new Audio('assets/audio/alarm.mp3');
   Audio_Alarm.volume = 0.0;
@@ -13,6 +78,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
   var Carnivore_Foods_No_Kibble = Carnivore_Foods_Default.slice(1, Carnivore_Foods_Default.length + 1);
   var Herbivore_Foods_No_Kibble = Herbivore_Foods_Default.slice(1, Herbivore_Foods_Default.length + 1);
   var Taming_Multiplier_Modifier = 2.0;
+
+	$rootScope.pagetitle = "Crumplecorn: Evolved";
 
   /* Check:
     Arthropluera
@@ -57,7 +124,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
       affinity: 375
     },
     'Cooked Lamb Chop': {
-      food: 50,
+      food: 35,
       affinity: 200
     },
 		'Raw Prime Meat': {
@@ -425,7 +492,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
   **    Tame Ineffectiveness By Affinity                Used in Taming Effectiveness
 
                                 -   filter by 'damage'
-        Bone Damage Multipliers
+        Bone Damage Adjusters (Multipliers)
 
       DinoCharacterStatusComponent_BP_[Creature]    -   filter by 'food'
         Base Food Consumption Rate                      the creature's food consumption rate
@@ -436,14 +503,14 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
         Recovery Rate Status Value                      part of the torpor reduction rate
         Knocked Out Torpidity Recovery Rate Multiplier  a multiplier for the torpor reduction rate when the creature is knocked out
         The Max Torpor Increase Per base Level          percentage of the creature's base torpor it gains per level after level 1
-      
-      DinoSettings_[Type]_[Size]_[Creature]   -   
+
+      DinoSettings_[Type]_[Size]_[Creature]   -
         Food Effectiveness Multipliers                  Drill down
         Extra Food Effectiveness Multipliers
 
-        The type of food can be found in "Food Item Parent", 
+        The type of food can be found in "Food Item Parent",
           and the value we are interested in is the "Affinity Override", which is the amount of affinity gain when this type of food is eaten
-        
+
                                               -   filter by 'damage'
         Melee_Torpidity_StoneWeapon (club)
         Melee_Human (fists)
@@ -483,13 +550,21 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		},
 
 		Allosaurus: {
-			foodrate: -0.001852*180.063385,
-			baseTorpidity: 1000.0,
-			baseTorporRecoveryRate: -0.1*8.0,
-			torporPerLevel: 0.06,
 			requiredTameAffinity: 2400.0,
 			requiredTameAffinityPerBaseLevel: 100,
 			tameIneffectivenessByAffinity: 1.875,
+      baseFoodConsumptionRate: -0.001852,
+      proneWaterFoodConsumptionMultiplier: 180.063385,
+			get foodrate () {
+        return this.baseFoodConsumptionRate * this.proneWaterFoodConsumptionMultiplier;
+      },
+			baseTorpidity: 1000.0,
+      recoveryRateStatusValue: -0.1,
+      knockedOutTorpidityRecoveryRateMultiplier: 8.0,
+			get baseTorporRecoveryRate () {
+        return this.recoveryRateStatusValue * this.knockedOutTorpidityRecoveryRateMultiplier;
+      },
+			torporPerLevel: 0.06,
 			basefood: 'Raw Meat',
 			foods: Carnivore_Foods_Default,
 			kibble: 'Diplo',
@@ -503,6 +578,8 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 				"Body": 1
 			}
 		},
+
+    // Here
 
 		Anglerfish: {
 			foodrate: -0.001852*149.988007,
@@ -524,7 +601,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			hitboxes: {
 				"Body": 1
 			}
-		},		
+		},
 
 		Ankylosaurus: {
 			foodrate: -0.003156*176.03154,
@@ -814,7 +891,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			nonviolentfoodaffinitymultiplier: 3.0
 		},
 
-		"Direbear": {
+		Direbear: {
 			foodrate: -0.003156*150.0,
 			baseTorpidity: 1000,
 			baseTorporRecoveryRate: -0.1*9.0,
@@ -836,7 +913,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			}
 		},
 
-		"Direwolf": {
+		Direwolf: {
 			foodrate: -0.444444462455,
 			baseTorpidity: 450,
 			baseTorporRecoveryRate: -0.1*5.0,
@@ -1867,7 +1944,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		if (creature.tamingmethod == "Non-Violent") {
 
 			for (var food in $scope.foods) {
-				$scope.maxfoodamounts[food] = Math.ceil(creature.requiredaffinity/$scope.foods[food].affinity/(creature.tamingmultiplier*Taming_Multiplier_Modifier)/creaturedata.nonviolentfoodaffinitymultiplier);
+				$scope.maxfoodamounts[food] = Math.ceil(creature.requiredaffinity / $scope.foods[food].affinity/(creature.tamingmultiplier*Taming_Multiplier_Modifier)/creaturedata.nonviolentfoodaffinitymultiplier);
 			}
 
 		}
@@ -1901,7 +1978,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		if (creature.tamingmethod == "Standard") {
 
 			for (var i = 0; i < creaturedata.foods.length; i++) {
-				
+
 				affinity += foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*foodamounts[creaturedata.foods[i]];
 				food -= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
 			}
@@ -1916,7 +1993,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 		if (creature.tamingmethod == "Non-Violent") {
 
 			for (var i = 0; i < creaturedata.foods.length; i++) {
-				
+
 				affinity += foods[creaturedata.foods[i]].affinity*(creature.tamingmultiplier*Taming_Multiplier_Modifier)*creaturedata.nonviolentfoodaffinitymultiplier*foodamounts[creaturedata.foods[i]];
 				food -= foods[creaturedata.foods[i]].food*foodamounts[creaturedata.foods[i]];
 			}
@@ -1926,7 +2003,7 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 			creature.totalfood = -food;
 			creature.suppliedaffinity = affinity;
 
-		}		
+		}
 
 		$scope.totaltimecalc();
 		$scope.effectivenesscalc();
@@ -2162,6 +2239,5 @@ angular.module('TamingModule', []).controller('TamingController', ['$scope', '$r
 	$scope.alltimescalc();
 	$scope.foodcalc();
   $scope.showTameDetails();
-	$rootScope.pagetitle = "Crumplecorn: Evolved";
 
 }]);
